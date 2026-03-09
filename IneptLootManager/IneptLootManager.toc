@@ -1,6 +1,6 @@
 ## Interface: 20505
 ## Title: ILM |cffdcb749Inept Loot Manager|r
-## Notes: Robust, DKP and EPGP based Loot Manager system. Formerly |cffdcb749Inept Loot Manager|r.
+## Notes: DKP based Loot Manager system for TBC Anniversary Classic.
 ## Author: Lantis
 ## Category-enUS: Loot
 ## Category-deDE: Beute

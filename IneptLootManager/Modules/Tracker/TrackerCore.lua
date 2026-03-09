@@ -1,7 +1,9 @@
-local _, PRIV = ...
+-- Shared state for Tracker module (replaces PRIV from separate addon)
+ILM._TRACKER = ILM._TRACKER or {}
+ILM._TRACKER.MODULES = {}
+ILM._TRACKER.CONSTANTS = {}
 
-PRIV.MODULES = {}
-PRIV.CONSTANTS = {}
+local PRIV = ILM._TRACKER
 
 local Core = {}
 

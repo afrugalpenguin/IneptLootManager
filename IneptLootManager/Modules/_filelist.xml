@@ -12,4 +12,7 @@
 
 	<Include file="Global\_filelist.xml"/>
 	<Include file="GUI\_filelist.xml"/>
+
+	<Include file="Alerts\_filelist.xml"/>
+	<Include file="Tracker\_filelist.xml"/>
 </Ui>

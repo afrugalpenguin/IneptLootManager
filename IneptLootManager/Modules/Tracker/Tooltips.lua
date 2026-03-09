@@ -1,9 +1,5 @@
--- ------------------------------- --
-local _, PRIV = ...
--- ------ ILM common cache ------- --
--- local LOG       = ILM.LOG
+local PRIV = ILM._TRACKER
 local UTILS     = ILM.UTILS
--- ------------------------------- --
 
 local ColorCodeText = UTILS.ColorCodeText
 local GetClassColor = UTILS.GetClassColor
@@ -20,7 +16,6 @@ local function generateTooltipLines(roster, itemId, perRosterData, requiresRebui
         local lines = {}
         for _, data in ipairs(perRosterData) do
             if data.count > 0 then
-                --local newLine = "  " .. ColorCodeText(data.profile:Name(), GetClassColor(data.profile:Class()).hex)
                 local newLine = ColorCodeText(data.profile:ShortName(), GetClassColor(data.profile:Class()).hex)
                 if data.count > 1 then
                     newLine = newLine .. ColorCodeText(" (" .. data.count .. ")", "9d9d9d")
@@ -38,7 +33,6 @@ local function generateTooltipLines(roster, itemId, perRosterData, requiresRebui
 end
 
 local function addItemReceiversToTooltip(tooltip)
-    -- Sanity Check
     local itemLink
     if not tooltip then return end
     if not PRIV.Core:IsInitialized() then return end

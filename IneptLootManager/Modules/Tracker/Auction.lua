@@ -1,13 +1,8 @@
--- ------------------------------- --
-local _, PRIV = ...
--- ------ ILM common cache ------- --
--- local LOG       = ILM.LOG
--- local UTILS     = ILM.UTILS
--- ------------------------------- --
+local PRIV = ILM._TRACKER
 
 local dataColumn = {
     name = ILM.L["Count"],
-    align = "CENTER", -- TODO this doesnt work
+    align = "CENTER",
     width = 36
 }
 

@@ -7,15 +7,6 @@ local function PointReceivedAlertFrame_SetUp(self, data)
     local value = tonumber(data.value) or 0
     value = (value ~= nil) and tostring(value) or tostring(data.value)
     local suffix = "DKP"
-    if data.rosterType == ILM.CONSTANTS.POINT_TYPE.EPGP then
-        if data.changeType == ILM.CONSTANTS.POINT_CHANGE_TYPE.POINTS then
-            suffix = "EP"
-        elseif data.changeType == ILM.CONSTANTS.POINT_CHANGE_TYPE.SPENT then
-            suffix = "GP"
-        else
-            suffix = "EP/GP"
-        end
-    end
     if data.reason ~= ILM.CONSTANTS.POINT_CHANGE_REASON.DECAY then
         self.Amount:SetText(string.format(ILM.L["%s %s"], value, suffix))
     else

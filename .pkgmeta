@@ -41,9 +41,6 @@ ignore:
 
 move-folders:
   IneptLootManager/IneptLootManager: IneptLootManager
-  IneptLootManager/IneptLootManager_Alerts: IneptLootManager_Alerts
-  IneptLootManager/IneptLootManager_Integrations: IneptLootManager_Integrations
-  IneptLootManager/IneptLootManager_Tracker: IneptLootManager_Tracker
 
 manual-changelog:
   filename: CHANGELOG.md

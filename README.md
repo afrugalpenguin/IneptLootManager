@@ -48,11 +48,7 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 
 ## Installation
 
-Copy the following folders into your `Interface/AddOns/` directory:
-
-- `IneptLootManager/` — Core addon (required)
-- `IneptLootManager_Alerts/` — Alert notifications (optional)
-- `IneptLootManager_Tracker/` — Item tracking (optional)
+Copy the `IneptLootManager/` folder into your `Interface/AddOns/` directory.
 
 ## License
 
