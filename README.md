@@ -40,16 +40,10 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 - Time travel / sandbox mode for correcting historical errors
 - Multi-level logging
 
-### Integrations
-
-- JSON exporting via `/ilm export`
-- [RCLootCouncil integration](https://github.com/evil-morfar/RCLootCouncil_Classic) for LC + DKP
-
 ## Slash Commands
 
 - `/ilm` — Open configuration
 - `/ilm award [item]` — Award item GUI
-- `/ilm export` — Export data
 - `/ilm guireset` — Reset GUI position
 
 ## Installation
@@ -59,7 +53,6 @@ Copy the following folders into your `Interface/AddOns/` directory:
 - `IneptLootManager/` — Core addon (required)
 - `IneptLootManager_Alerts/` — Alert notifications (optional)
 - `IneptLootManager_Tracker/` — Item tracking (optional)
-- `IneptLootManager_Integrations/` — JSON export (optional)
 
 ## License
 
