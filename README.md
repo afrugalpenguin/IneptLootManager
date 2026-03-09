@@ -50,7 +50,6 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 - `/ilm` — Open configuration
 - `/ilm award [item]` — Award item GUI
 - `/ilm export` — Export data
-- `/ilm queue` — Toggle loot tracking queue
 - `/ilm guireset` — Reset GUI position
 
 ## Installation
