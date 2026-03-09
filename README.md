@@ -1,16 +1,16 @@
 # Inept Loot Manager
 
-TBC Anniversary Classic fork of [Core Loot Manager](https://github.com/ClassicLootManager/ClassicLootManager) — a DKP and EPGP based loot management system.
+TBC Anniversary Classic fork of [Core Loot Manager](https://github.com/ClassicLootManager/ClassicLootManager) — a DKP based loot management system.
 
 ## About
 
-Inept Loot Manager is a robust loot tracking and awarding tool for guilds running TBC Anniversary Classic. It supports **DKP**, **EPGP**, and **SK** point systems with automatic data synchronisation across your guild.
+Inept Loot Manager is a robust loot tracking and awarding tool for guilds running TBC Anniversary Classic. It uses **DKP** with automatic data synchronisation across your guild.
 
 This fork has been stripped down to target TBC Anniversary Classic exclusively (Interface 20505).
 
 ## Features
 
-- **Multiple point systems** — DKP, EPGP, and SK, running simultaneously if desired
+- **DKP point system** with fine-grained configuration
 - **Auto synchronisation** within and across guilds
 - **Multiple roster (team) support** with independent configurations
 - **Multiple item auction** — auction any number of items in a single auction
@@ -31,8 +31,7 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 - On-time, raid completion, and interval bonuses
 - Boss kill bonuses (configurable per boss)
 - Configurable weekly and hard point caps
-- Zero-Sum Bank mode, inflation, and taxation (DKP)
-- Minimum GP configuration (EPGP)
+- Zero-Sum Bank mode, inflation, and taxation
 
 ### Administration
 
@@ -44,7 +43,7 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 ### Integrations
 
 - JSON exporting via `/ilm export`
-- [RCLootCouncil integration](https://github.com/evil-morfar/RCLootCouncil_Classic) for LC + EPGP/DKP
+- [RCLootCouncil integration](https://github.com/evil-morfar/RCLootCouncil_Classic) for LC + DKP
 
 ## Slash Commands
 
