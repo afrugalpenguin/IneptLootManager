@@ -327,13 +327,12 @@ local function GenerateAwardOptions(self)
                 self:Refresh()
             end),
             confirm = (function()
-                local roster = ILM.MODULES.AuctionManager:GetCurrentAuctionInfo():GetRoster()
                 return string.format(
                     ILM.L["Are you sure, you want to award %s to %s for %s %s?"],
                     self.auctionItem:GetItemLink(),
                     UTILS.ColorCodeText(self.awardPlayer, "FFD100"),
                     tostring(self.awardPrice),
-                    (roster and roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP) and ILM.L["GP"] or ILM.L["DKP"]
+                    ILM.L["DKP"]
                 )
             end),
             width = 0.5+0.2,
@@ -811,11 +810,7 @@ local function BuildBidRow(name, response, roster, namedButtonMode, externalData
     if profile then
         class = profile:ClassInternal()
         classColor = UTILS.GetClassColor(profile:Class())
-        if roster:GetPointType() == CONSTANTS.POINT_TYPE.DKP then
-            current = roster:Standings(profile:GUID())
-        else
-            current = roster:Priority(profile:GUID())
-        end
+        current = roster:Standings(profile:GUID())
     end
     local bidTypeString
     if namedButtonMode then

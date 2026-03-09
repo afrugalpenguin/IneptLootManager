@@ -6,7 +6,6 @@ local CONSTANTS = ILM.CONSTANTS
 local UTILS     = ILM.UTILS
 -- ------------------------------- --
 
-local colorTurquoise = {r = 0.2, g = 0.93, b = 0.93, a = 1.0}
 local colorGreen = {r = 0.2, g = 0.93, b = 0.2, a = 1.0}
 local colorGold = {a = 1, r = 1, g = 0.8, b = 0}
 
@@ -347,7 +346,6 @@ local function tableDataFeeder()
     local roster = ILM.MODULES.RosterManager:GetRosterByUid(UnifiedGUI_History.roster)
     if not roster then return {} end
 
-    local isEPGP = (roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP)
     -- TODO: Change from loot type and profile name to filter as its faster
     local profile = ILM.MODULES.ProfileManager:GetProfileByName(UnifiedGUI_History.profile or "")
     if UnifiedGUI_History.historyType ~= CONSTANTS.HISTORY_TYPE.POINT then
@@ -381,11 +379,6 @@ local function tableDataFeeder()
         for _,lootData in ipairs(displayedLoot) do
             local loot = lootData[1]
             local value = tostring(loot:Value())
-            if isEPGP then
-                value = (value) .. " " .. ILM.L["GP"]
-            -- else
-                -- value = (value) .. " " .. ILM.L["DKP"]
-            end
             local row = {cols = {
                 {value = lootData[2]},
                 {value = lootData[2]}, -- itemLink
@@ -448,9 +441,7 @@ local function tableDataFeeder()
             local row = {cols = {
                 {value = ""},
                 {value = CONSTANTS.POINT_CHANGE_REASONS.ALL[reason] or ""},
-                {value = value,
-                    color = ((isEPGP and (history:Type() == CONSTANTS.POINT_CHANGE_TYPE.SPENT)) and colorTurquoise)
-                },
+                {value = value},
                 {value = date(ILM.L["%Y/%m/%d %H:%M:%S (%A)"], history:Timestamp())},
                 {value = player, color = color},
                 {value = false},

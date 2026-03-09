@@ -102,9 +102,6 @@ function Roster:AddProfileByGUID(GUID)
     self.profilePointHistory[GUID] = {}
     self.inRoster[GUID] = true
     self.pointInfo[GUID] = ILM.MODELS.PointInfo:New()
-    if self:GetPointType() == CONSTANTS.POINT_TYPE.EPGP then
-        self.pointInfo[GUID].spent = self.configuration._.minGP
-    end
 end
 
 function Roster:RemoveProfileByGUID(GUID)
@@ -147,21 +144,6 @@ function Roster:Standings(GUID)
         return self.standings or {}
     else
         return self.standings[GUID] or 0
-    end
-end
-
-function Roster:GP(GUID)
-    local pointInfo = self.pointInfo[GUID]
-    if not pointInfo then return -1 end
-    -- return mmax(pointInfo.spent, self.configuration._.minGP)
-    return pointInfo.spent
-end
-
-function Roster:Priority(GUID)
-    if GUID == nil then
-        return 0
-    else
-        return UTILS.round((self.standings[GUID] or 0) / self:GP(GUID), self.configuration._.roundPR)
     end
 end
 
@@ -252,7 +234,7 @@ function Roster:UpdateSpent(GUID, value)
     LOG:Debug("Roster:UpdateSpent(%s, %s, %s)", GUID, self.uid, value)
     local new = UTILS.round(self.pointInfo[GUID].spent + value, self.configuration._.roundDecimals)
     -- Handle the spent update
-    self.pointInfo[GUID].spent = math.max(new, self.configuration._.minGP)
+    self.pointInfo[GUID].spent = new
 end
 
 function Roster:SetStandings(GUID, value)
@@ -270,16 +252,7 @@ function Roster:DecayStandings(GUID, value)
 end
 
 function Roster:DecaySpent(GUID, value)
-    -- Not decayed in DKP - that's an artificial limitation coming from events
-    -- Originally Decay events didnt discern if its total, spent or current points
-    -- for DKP it would mean current for EPGP total
-    -- If DKP would ever need to decay spent then a look into mutators would be needed
-    -- currently lack of the old field is treated as decay total
-    -- Spent in EPGP = GP -> thus needs to be decayed also
-    if self:GetPointType() == CONSTANTS.POINT_TYPE.EPGP then
-        local new = UTILS.round(((self.pointInfo[GUID].spent * (100 - value)) / 100), self.configuration._.roundDecimals)
-        self.pointInfo[GUID].spent = math.max(new, self.configuration._.minGP)
-    end
+    -- DKP does not decay spent points
 end
 
 function Roster:DecayTotal(GUID, value)
@@ -490,11 +463,6 @@ local configurationCallbacks = {
     weeklyReset = function(self, value)
         self.attendanceTracker:UpdateWeeklyReset(value)
     end,
-    minGP = function(self, value)
-        for _, pointInfo in pairs(self.pointInfo) do
-            pointInfo.spent = math.max(pointInfo.spent, self.configuration._.minGP)
-        end
-    end,
     roundDecimals = function(self, value)
         for _, pointInfo in pairs(self.pointInfo) do
             pointInfo:SetRounding(value)
@@ -681,23 +649,14 @@ ILM.MODELS.Roster = Roster
 -- Constants
 CONSTANTS.POINT_TYPE = {
     DKP = 0,
-    EPGP = 1,
-    -- ROLL = 2,
-    -- SK = 3
 }
 
 CONSTANTS.POINT_TYPES = UTILS.Set({
-    CONSTANTS.POINT_TYPE.DKP, -- DKP
-    CONSTANTS.POINT_TYPE.EPGP, -- EPGP
-    -- CONSTANTS.POINT_TYPE.ROLL, -- ROLL
-    -- CONSTANTS.POINT_TYPE.SK  -- SK
+    CONSTANTS.POINT_TYPE.DKP,
 })
 
 CONSTANTS.POINT_TYPES_GUI = {
     [CONSTANTS.POINT_TYPE.DKP] = ILM.L["DKP"],
-    [CONSTANTS.POINT_TYPE.EPGP] = ILM.L["EPGP"],
-    -- [CONSTANTS.POINT_TYPE.ROLL] = ILM.L["ROLL"],
-    -- [CONSTANTS.POINT_TYPE.SK] = ILM.L["SK"]
 }
 
 CONSTANTS.AUCTION_TYPE = {
@@ -721,10 +680,6 @@ CONSTANTS.AUCTION_TYPES_GUI = {
     [CONSTANTS.AUCTION_TYPE.ANONYMOUS_OPEN] = ILM.L["Anonymous Open"]
 }
 
-CONSTANTS.AUCTION_TYPES_EPGP_GUI = {
-    [CONSTANTS.AUCTION_TYPE.OPEN] = ILM.L["Open"],
-    [CONSTANTS.AUCTION_TYPE.SEALED] = ILM.L["Sealed"],
-}
 
 CONSTANTS.AUCTION_TYPES_OPEN = UTILS.Set({
     CONSTANTS.AUCTION_TYPE.OPEN,
@@ -749,10 +704,6 @@ CONSTANTS.ITEM_VALUE_MODES_GUI = {
     [CONSTANTS.ITEM_VALUE_MODE.TIERED] = ILM.L["Tiered"],
 }
 
-CONSTANTS.ITEM_VALUE_MODES_EPGP_GUI = {
-    [CONSTANTS.ITEM_VALUE_MODE.SINGLE_PRICED] = ILM.L["Single-Priced"],
-    [CONSTANTS.ITEM_VALUE_MODE.TIERED] = ILM.L["Tiered"],
-}
 
 
 CONSTANTS.INVENTORY_TYPES = {

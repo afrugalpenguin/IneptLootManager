@@ -179,16 +179,7 @@ local function mutate_decay_spent(roster, GUID, value, timestamp)
 end
 
 local function verify_modify_point_change_type(roster, pointChangeType, functionName)
-    local success = false
-    if (roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP) then
-        if CONSTANTS.POINT_AWARD_TYPES[pointChangeType] then
-            success = true
-        end
-    else
-        if pointChangeType == CONSTANTS.POINT_CHANGE_TYPE.POINTS then
-            success = true
-        end
-    end
+    local success = (pointChangeType == CONSTANTS.POINT_CHANGE_TYPE.POINTS)
     if not success then
         LOG:Error("%s: Invalid point award type (%s)", functionName, pointChangeType)
     end
@@ -207,16 +198,7 @@ local function verify_set_point_change_type(roster, pointChangeType, functionNam
 end
 
 local function verify_decay_point_change_type(roster, pointChangeType, functionName)
-    local success = false
-    if (roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP) then
-        if CONSTANTS.POINT_DECAY_TYPES[pointChangeType] then
-            success = true
-        end
-    else
-        if pointChangeType == CONSTANTS.POINT_CHANGE_TYPE.POINTS then
-            success = true
-        end
-    end
+    local success = (pointChangeType == CONSTANTS.POINT_CHANGE_TYPE.POINTS)
     if not success then
         LOG:Error("%s: Invalid point decay type (%s)", functionName, pointChangeType)
     end
@@ -547,17 +529,6 @@ CONSTANTS.POINT_CHANGE_TYPE = {
 CONSTANTS.POINT_AWARD_TYPES = UTILS.Set({    1, 2 })
 CONSTANTS.POINT_DECAY_TYPES = UTILS.Set({ 0, 1, 2 })
 
-CONSTANTS.EPGP_POINT_AWARD_TYPES_GUI = {
-    [CONSTANTS.POINT_CHANGE_TYPE.POINTS]   = ILM.L["EP"],
-    [CONSTANTS.POINT_CHANGE_TYPE.SPENT]    = ILM.L["GP"]
-}
-
-
-CONSTANTS.EPGP_POINT_DECAY_TYPES_GUI = {
-    [CONSTANTS.POINT_CHANGE_TYPE.TOTAL]    = ILM.L["EP/GP"],
-    [CONSTANTS.POINT_CHANGE_TYPE.POINTS]   = ILM.L["EP"],
-    [CONSTANTS.POINT_CHANGE_TYPE.SPENT]    = ILM.L["GP"]
-}
 
 ILM.MODULES.PointManager = PointManager
 --@do-not-package@

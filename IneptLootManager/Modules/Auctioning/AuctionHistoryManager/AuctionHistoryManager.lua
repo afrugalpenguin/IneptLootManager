@@ -84,7 +84,6 @@ function AuctionHistoryManager:AddAuctionItem(auctionItem, uuid)
         local auction = ILM.MODULES.AuctionManager:GetCurrentAuctionInfo()
         local roster = auction:GetRoster()
         local namedButtonsMode = auction:GetNamedButtonsMode()
-        local isEPGP = (roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP)
         local bids = {}
         local bidNames = {}
         local rolls = {}
@@ -114,7 +113,7 @@ function AuctionHistoryManager:AddAuctionItem(auctionItem, uuid)
             rolls     = rolls,
             upgraded  = items,
             time      = auction:GetEndTime(),
-            isEPGP    = isEPGP,
+            isEPGP    = false,
             uuid      = uuidData
         })
         ILM.GUI.AuctionHistory:Refresh(true)
@@ -182,7 +181,7 @@ function AuctionHistoryManager:PostData(data)
             UTILS.SendChatMessage(
                 bidder .. ": " ..
                 tostring(bid) .. " " ..
-                (data.isEPGP and ILM.L["GP"] or ILM.L["DKP"]) ..
+                ILM.L["DKP"] ..
                 rolls ..
                 bidName ..
                 items,

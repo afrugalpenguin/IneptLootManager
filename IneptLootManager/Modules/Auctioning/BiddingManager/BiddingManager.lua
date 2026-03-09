@@ -300,8 +300,7 @@ local function stringifyBidInfo(auction, item, response)
     if CONSTANTS.BID_TYPE_HIDDEN[response:Type()] then
         short = response:Type() == CONSTANTS.BID_TYPE.CANCEL and ILM.L["Cancel"] or ILM.L["Pass"]
     else
-        local roster = auction:GetRoster()
-        points = (roster and roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP) and ILM.L["GP"] or ILM.L["DKP"]
+        points = ILM.L["DKP"]
         value = response:Value()
         spacer = " "
 

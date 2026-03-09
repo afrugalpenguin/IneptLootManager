@@ -1032,19 +1032,8 @@ function UTILS.GetRosterConditionalFieldName(key, roster, prefix, suffix)
     return name
 end
 
--- TODO this doesnt look good in history, we dont want DKP displayed there really
 function UTILS.DecodePointTypeChangeName(pointType, changeType, displayDKP)
-    local points = displayDKP and ILM.L["DKP"] or "" -- not test_cameraDynamicPitch
-    if pointType == CONSTANTS.POINT_TYPE.EPGP then
-        if changeType == CONSTANTS.POINT_CHANGE_TYPE.SPENT then
-            points = ILM.L["GP"]
-        elseif changeType == CONSTANTS.POINT_CHANGE_TYPE.POINTS then
-            points = ILM.L["EP"]
-        else
-            points = ILM.L["EP/GP"]
-        end
-    end
-    return points
+    return displayDKP and ILM.L["DKP"] or ""
 end
 
 local raidChannels = UTILS.Set({"RAID", "RAID_WARNING"})

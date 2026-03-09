@@ -45,20 +45,12 @@ local function ST_GetPointType(row)
     return row.cols[12].value
 end
 
-local function ST_GetEP(row)
-    return row.cols[4].value
-end
-
 local function ST_GetIsLocked(row)
     return row.cols[13].value
 end
 
 local function ST_GetHighlight(row)
     return row.cols[14].value
-end
-
-local function ST_GetGP(row)
-    return row.cols[5].value
 end
 
 local highlightPlayer = UTILS.getHighlightMethod(colorBlueTransparent, true)
@@ -88,10 +80,6 @@ local function HandleRosterChange(rosterUid)
     UnifiedGUI_Standings.roster = rosterUid
     UnifiedGUI_Standings.awardType = CONSTANTS.POINT_CHANGE_TYPE.POINTS
     UnifiedGUI_Standings.decayType = CONSTANTS.POINT_CHANGE_TYPE.POINTS
-    local roster = ILM.MODULES.RosterManager:GetRosterByUid(UnifiedGUI_Standings.roster)
-    if roster and roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP then
-        UnifiedGUI_Standings.decayType = CONSTANTS.POINT_CHANGE_TYPE.TOTAL
-    end
 end
 
 function UnifiedGUI_Standings:GetSelection()
@@ -293,24 +281,6 @@ local function GenerateAssistantOptions(self)
             end),
             order = 14
         },
-        award_type_dropdown = {
-            name = ILM.L["Type"],
-            type = "select",
-            values = CONSTANTS.EPGP_POINT_AWARD_TYPES_GUI,
-            set = function(i, v) self.awardType = v end,
-            get = function(i) return self.awardType end,
-            control = "ILMButtonDropDown",
-            hidden = (function()
-                local roster = ILM.MODULES.RosterManager:GetRosterByUid(self.roster)
-                if roster then
-                    return (roster:GetPointType() ~= CONSTANTS.POINT_TYPE.EPGP)
-                end
-
-                return true
-            end),
-            order = 15,
-            width = 0.2
-        },
     }
 end
 
@@ -326,35 +296,12 @@ local function GenerateManagerOptions(self)
             pattern = CONSTANTS.REGEXP_FLOAT,
             order = 21
         },
-        decay_type_dropodown = {
-            name = ILM.L["Type"],
-            type = "select",
-            values = CONSTANTS.EPGP_POINT_DECAY_TYPES_GUI,
-            set = function(i, v) self.decayType = v end,
-            get = function(i) return self.decayType end,
-            control = "ILMButtonDropDown",
-            hidden = (function()
-                local roster = ILM.MODULES.RosterManager:GetRosterByUid(self.roster)
-                if roster then
-                    return (roster:GetPointType() ~= CONSTANTS.POINT_TYPE.EPGP)
-                end
-
-                return true
-            end),
-            order = 23,
-            width = 0.2
-        },
         decay_negative = {
             name = ILM.L["Decay Negatives"],
             desc = ILM.L["Include players with negative standings in decay."],
             type = "toggle",
             set = function(i, v) self.includeNegative = v end,
             get = function(i) return self.includeNegative end,
-            hidden = function()
-                local roster = ILM.MODULES.RosterManager:GetRosterByUid(UnifiedGUI_Standings.roster)
-                if not roster then return false end
-                return (roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP)
-            end,
             width = "full",
             order = 24
         },
@@ -433,17 +380,6 @@ local columnsDKP = {
     }
 }
 
-local columnsEPGP = {
-    {   name = "", width = 18, DoCellUpdate = UTILS.LibStClassCellUpdate },
-    {   name = ILM.L["Name"], width = 107, DoCellUpdate = UTILS.LibStNameCellUpdate },
-    {   name = ILM.L["PR"], width = 65, sort = LibStub("ScrollingTable").SORT_DSC, color = colorGreen },
-    {   name = ILM.L["EP"], width = 65 },
-    {   name = ILM.L["GP"], width = 65 },
-    {   name = ILM.L["Att. [%]"], width = 60,
-        comparesort = UTILS.LibStCompareSortWrapper(UTILS.LibStModifierFnNumber)
-    }
-}
-
 local tableStructure = {
     rows = 25,
     -- columns - structure of the ScrollingTable
@@ -476,29 +412,20 @@ local tableStructure = {
                 gains = gains .. " / " .. weeklyCap
             end
 
-            local isEPGP = (ST_GetPointType(rowData) == CONSTANTS.POINT_TYPE.EPGP)
-            if isEPGP then
-                tooltip:AddDoubleLine(ILM.L["Information"], lockedString)
-                tooltip:AddDoubleLine(
-                    UTILS.ColorCodeText(tostring(ST_GetEP(rowData)) .. " ".. ILM.L["EP"], "44ee44"),
-                    UTILS.ColorCodeText(tostring(ST_GetGP(rowData)) .. " ".. ILM.L["GP"], "44ee44"))
-                tooltip:AddDoubleLine(ILM.L["Weekly gains"], tostring(gains) .. " " .. ILM.L["EP"])
-            else
-                tooltip:AddDoubleLine(ILM.L["Information"], lockedString)
-                tooltip:AddDoubleLine(ILM.L["Weekly gains"], gains)
-                tooltip:AddLine("\n")
-                -- Statistics
-                tooltip:AddDoubleLine(UTILS.ColorCodeText(ILM.L["Statistics"], "44ee44"), ILM.L["DKP"])
-                tooltip:AddDoubleLine(ILM.L["Total spent"], pointInfo.spent)
-                tooltip:AddDoubleLine(ILM.L["Total received"], pointInfo.received)
-                tooltip:AddDoubleLine(ILM.L["Total blocked"], pointInfo.blocked)
-                tooltip:AddDoubleLine(ILM.L["Total decayed"], pointInfo.decayed)
-            end
+            tooltip:AddDoubleLine(ILM.L["Information"], lockedString)
+            tooltip:AddDoubleLine(ILM.L["Weekly gains"], gains)
+            tooltip:AddLine("\n")
+            -- Statistics
+            tooltip:AddDoubleLine(UTILS.ColorCodeText(ILM.L["Statistics"], "44ee44"), ILM.L["DKP"])
+            tooltip:AddDoubleLine(ILM.L["Total spent"], pointInfo.spent)
+            tooltip:AddDoubleLine(ILM.L["Total received"], pointInfo.received)
+            tooltip:AddDoubleLine(ILM.L["Total blocked"], pointInfo.blocked)
+            tooltip:AddDoubleLine(ILM.L["Total decayed"], pointInfo.decayed)
             -- Loot History
             local lootList = ST_GetProfileLoot(rowData)
             tooltip:AddLine("\n")
             if #lootList > 0 then
-                tooltip:AddDoubleLine(UTILS.ColorCodeText(ILM.L["Latest loot"], "44ee44"), isEPGP and "" or ILM.L["DKP"])
+                tooltip:AddDoubleLine(UTILS.ColorCodeText(ILM.L["Latest loot"], "44ee44"), ILM.L["DKP"])
                 local limit = #lootList - 4 -- inclusive (- 5 + 1)
                 if limit < 1 then
                     limit = 1
@@ -508,9 +435,6 @@ local tableStructure = {
                     local _, itemLink = UTILS.GetItemInfo(loot:String())
                     if itemLink then
                         local value = loot:Value()
-                        if isEPGP then
-                            value = tostring(value) .. " " .. ILM.L["GP"]
-                        end
                         tooltip:AddDoubleLine(itemLink, value)
                     end
                 end
@@ -521,7 +445,7 @@ local tableStructure = {
             local pointList = ST_GetProfilePoints(rowData)
             tooltip:AddLine("\n")
             if #pointList > 0 then
-                tooltip:AddDoubleLine(UTILS.ColorCodeText(ILM.L["Latest points"], "44ee44"), isEPGP and "" or ILM.L["DKP"])
+                tooltip:AddDoubleLine(UTILS.ColorCodeText(ILM.L["Latest points"], "44ee44"), ILM.L["DKP"])
                 local limit = #pointList - 4 -- inclusive (- 5 + 1)
                 if limit < 1 then
                     limit = 1
@@ -575,23 +499,13 @@ local function tableDataFeeder()
     local weeklyCap = roster:GetConfiguration("weeklyCap")
     local rowId = 1
     local data = {}
-    local isEPGP = (roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP)
     for GUID,value in pairs(roster:Standings()) do
         local profile = ILM.MODULES.ProfileManager:GetProfileByGUID(GUID)
         local attendance = UTILS.round(roster:GetAttendance(GUID) or 0, 0)
         local pointInfo = roster:GetPointInfoForPlayer(GUID)
-        local numColumnValue
-        local primary
-        local secondary
-        if isEPGP then
-            numColumnValue = roster:Priority(GUID)
-            primary = value
-            secondary = roster:GP(GUID)
-        else
-            primary = pointInfo.spent
-            secondary = pointInfo.received
-            numColumnValue = value
-        end
+        local numColumnValue = value
+        local primary = pointInfo.spent
+        local secondary = pointInfo.received
         if profile then
             local highlight
             if profile:IsLocked() then
@@ -761,11 +675,7 @@ end
 local function refreshHandler()
     local roster = ILM.MODULES.RosterManager:GetRosterByUid(UnifiedGUI_Standings.roster)
     if roster then
-        if roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP then
-            ILM.GUI.Unified:GetScrollingTable():SetDisplayCols(columnsEPGP)
-        else
-            ILM.GUI.Unified:GetScrollingTable():SetDisplayCols(columnsDKP)
-        end
+        ILM.GUI.Unified:GetScrollingTable():SetDisplayCols(columnsDKP)
     end
 end
 

@@ -111,14 +111,13 @@ local function addItemPriceToTooltip(tooltip)
         local display = raid and true or ILM.MODULES.RosterManager:GetDisplayTooltip(roster:UID())
         if display then
             local values = roster:GetItemValuesFromItemLink(itemLink)
-            local isEPGP = roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP
             local itemValueMode = roster:GetConfiguration("itemValueMode")
             -- Format
             local priceText = formatPriceText(values, itemValueMode)
             -- Set tooltip
             if strlen(priceText) > 0 then
                 local rosterName = name
-                tooltip:AddDoubleLine(rosterName, UTILS.ColorCodeText(priceText, "ffffff") .. " " .. (isEPGP and ILM.L["GP"] or ILM.L["DKP"]))
+                tooltip:AddDoubleLine(rosterName, UTILS.ColorCodeText(priceText, "ffffff") .. " " .. ILM.L["DKP"])
                 tooltip:AddTexture(ILM_ICON_DARK)
             end
         end

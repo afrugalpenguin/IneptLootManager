@@ -175,18 +175,6 @@ function RosterManagerOptions:Initialize()
         general_round_decimals_set = (function(name, value)
             SetRosterOption(name, "roundDecimals", value)
         end),
-        general_round_pr_get = (function(name)
-            return GetRosterOption(name, "roundPR")
-        end),
-        general_round_pr_set = (function(name, value)
-            SetRosterOption(name, "roundPR", value)
-        end),
-        general_min_gp_get = (function(name)
-            return tostring(GetRosterOption(name, "minGP"))
-        end),
-        general_min_gp_set = (function(name, value)
-            SetRosterOption(name, "minGP", value)
-        end),
         general_weekly_cap_get = (function(name)
             return tostring(GetRosterOption(name, "weeklyCap"))
         end),
@@ -313,12 +301,6 @@ function RosterManagerOptions:Initialize()
         end),
         general_starting_points_set = (function(name, value)
             SetRosterOption(name, "basePoints", value)
-        end),
-        general_starting_spent_get = (function(name)
-            return tostring(GetRosterOption(name, "baseSpent"))
-        end),
-        general_starting_spent_set = (function(name, value)
-            SetRosterOption(name, "baseSpent", value)
         end),
     }
 
@@ -795,7 +777,6 @@ function RosterManagerOptions:GenerateRosterOptions(name)
     local roster = ILM.MODULES.RosterManager:GetRosterByName(name)
     local isManager = ILM.MODULES.ACL:CheckLevel(CONSTANTS.ACL.LEVEL.MANAGER)
 
-    local isEPGP = (roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP)
     local disableManage = (function() return not isManager end)
 
     local equationGet, equationSet, expvarGet, expvarSet, multiplierGet, multiplierSet, slotGet, slotSet, tierGet, tierSet = generateDynamicItemValuesHandlers(roster)
@@ -824,18 +805,12 @@ function RosterManagerOptions:GenerateRosterOptions(name)
                         width = 1,
                         order = 0
                     },
-                    point_type = { -- informative
-                        name = ILM.L["Point type"],
-                        type = "select",
-                        -- style = "radio",
-                        get = (function(i)
-                            if not roster then return nil end
-                            return roster:GetPointType()
-                        end),
+                    point_type = { -- informative - DKP only
+                        type = "description",
+                        fontSize = "medium",
+                        name = ILM.L["Point type"] .. ": DKP",
                         order = 1,
-                        disabled = true,
                         width = 1,
-                        values = CONSTANTS.POINT_TYPES_GUI
                     },
                     round_decimals = {
                         name = ILM.L["Rounding"],
@@ -1034,20 +1009,11 @@ function RosterManagerOptions:GenerateRosterOptions(name)
                         width = "full"
                     },
                     starting_points = {
-                        name = function() return string.format(ILM.L["Starting %s"], isEPGP and ILM.L["EP"] or ILM.L["DKP"]) end,
-                        desc = function() return string.format(ILM.L["%s to be awarded to player when joining roster."], isEPGP and ILM.L["EP"] or ILM.L["DKP"]) end,
+                        name = function() return string.format(ILM.L["Starting %s"], ILM.L["DKP"]) end,
+                        desc = function() return string.format(ILM.L["%s to be awarded to player when joining roster."], ILM.L["DKP"]) end,
                         type = "input",
                         disabled = disableManage,
                         order = 22,
-                        pattern = CONSTANTS.REGEXP_FLOAT_POSITIVE,
-                    },
-                    starting_spent = {
-                        name = function() return string.format(ILM.L["Starting %s"], ILM.L["GP"]) end,
-                        desc = function() return string.format(ILM.L["%s to be awarded to player when joining roster."], ILM.L["GP"]) end,
-                        type = "input",
-                        disabled = disableManage,
-                        order = 23,
-                        hidden = not isEPGP,
                         pattern = CONSTANTS.REGEXP_FLOAT_POSITIVE,
                     },
                     bench_header = {
@@ -1086,32 +1052,6 @@ function RosterManagerOptions:GenerateRosterOptions(name)
                         type = "header",
                         order = 28,
                         width = "full"
-                    },
-                    epgp_header = {
-                        name = ILM.L["EPGP"],
-                        type = "header",
-                        order = 36,
-                        width = "full",
-                        hidden = not isEPGP,
-                    },
-                    min_gp = {
-                        name = ILM.L["Minimum GP"],
-                        desc = ILM.L["Minimum GP used in calculations when player has less GP than this value."],
-                        type = "input",
-                        disabled = disableManage,
-                        pattern = CONSTANTS.REGEXP_FLOAT_POSITIVE,
-                        order = 37,
-                        hidden = not isEPGP,
-                    },
-                    round_pr = {
-                        name = ILM.L["PR Rounding"],
-                        desc = ILM.L["Round PR to selected number of decimals"],
-                        type = "select",
-                        width = 1,
-                        disabled = disableManage,
-                        order = 38,
-                        hidden = not isEPGP,
-                        values = CONSTANTS.ALLOWED_ROUNDINGS_GUI
                     },
                 },
             },
@@ -1394,16 +1334,6 @@ function RosterManagerOptions:UpdateOptions()
             get = (function(i) return self.rosterName end),
             disabled = (function() return not ILM.MODULES.ACL:CheckLevel(CONSTANTS.ACL.LEVEL.MANAGER) end),
             order = 2,
-        },
-        point_type = {
-            name = ILM.L["Point type"],
-            desc = ILM.L["Select DKP or EPGP point system."],
-            type = "select",
-            set = (function(i, v) self.pointType = v end),
-            get = (function(i) return self.pointType end),
-            order = 3,
-            -- disabled = true,--(function() return not ILM.MODULES.ACL:CheckLevel(CONSTANTS.ACL.LEVEL.MANAGER) end),
-            values = CONSTANTS.POINT_TYPES_GUI
         },
     }
     for _, name in pairs(ILM.MODULES.RosterManager:GetRostersUidMap()) do

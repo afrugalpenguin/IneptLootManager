@@ -728,15 +728,11 @@ ILM.L["Dynamic Item values"] = "动态物品分值"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Standings.lua:483
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Standings.lua:485
 -- IneptLootManager/Utils.lua:1058
-ILM.L["EP"] = "EP"
 -- IneptLootManager/Modules/Points/PointManager/PointManager.lua:557
 -- IneptLootManager/Utils.lua:1060
-ILM.L["EP/GP"] = "EP/GP"
 -- IneptLootManager/Modules/Rosters/RosterManager/ItemValueCalculator.lua:196
-ILM.L["EPGP WEB"] = "EPGP WEB"
 -- IneptLootManager/Modules/Rosters/RosterManager/Roster.lua:698
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1091
-ILM.L["EPGP"] = "EPGP"
 -- IneptLootManager_Integrations/GenericImport.lua:245
 -- IneptLootManager_Integrations/ImportCSV.lua:152
 ILM.L["ERROR - invalid import data"] = "错误 - 无效的导入数据"
@@ -825,7 +821,6 @@ ILM.L["Executing migration even though ledger is not empty."] = "執行遷移，
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:532
 ILM.L["Exponent / Base"] = "指数 /基础"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:524
-ILM.L["Exponential scaling value used by the equations (Base for EPGPWeb, or Exponent for WoWpedia)"] = "方程式使用的指数缩放值（EPGPWEB的基础或WoWpedia指数）"
 -- IneptLootManager_Integrations/GUI.lua:397
 -- IneptLootManager_Integrations/GUI.lua:406
 -- IneptLootManager_Integrations/GUI.lua:483
@@ -926,7 +921,6 @@ ILM.L["GM"] = "Guild Master"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_History.lua:385
 -- IneptLootManager/Tooltips.lua:121
 -- IneptLootManager/Utils.lua:1056
-ILM.L["GP"] = "GP"
 -- IneptLootManager/Modules/Points/AutoAwardManager/Encounters/EncounterIDs___Base.lua:130
 ILM.L["Gahz'ranka"] = "加兹兰卡"
 -- IneptLootManager_Integrations/Integrations.lua:111
@@ -1378,10 +1372,8 @@ ILM.L["Minimal value increment for open auction mode."] = "公开拍卖模式的
 -- IneptLootManager_Integrations/Migration.lua:91
 ILM.L["Minimap Icon -> Configuration -> Wipe events"] = "小地图图标 -> 配置 -> 删除事件"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1099
-ILM.L["Minimum GP used in calculations when player has less GP than this value."] = "当角色的 GP 低于此值时，计算中使用minGP。"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1098
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Audit.lua:142
-ILM.L["Minimum GP"] = "最低GP"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Profiles.lua:91
 ILM.L["Minimum Level"] = "最低等级"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Profiles.lua:92
@@ -1611,10 +1603,8 @@ ILM.L["Overrides"] = "覆盖"
 -- IneptLootManager/Modules/Auctioning/AuctionManager/AuctionManager.lua:1292
 ILM.L["PASS"] = "跳过"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1107
-ILM.L["PR Rounding"] = "PR 四舍五入"
 -- IneptLootManager/Modules/Auctioning/BiddingManager/MultiGUI.lua:1333
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Standings.lua:439
-ILM.L["PR"] = "PR"
 -- .:indirectly
 ILM.L["Paladin"] = "圣骑士"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Raids.lua:288
@@ -1879,7 +1869,6 @@ ILM.L["Rounding"] = "四舍五入"
 -- IneptLootManager/Modules/Points/AutoAwardManager/Encounters/EncounterIDs_1_Classic.lua:96
 ILM.L["Ruins of Ahn'Qiraj"] = "安其拉废墟"
 -- IneptLootManager/Modules/Rosters/RosterManager/Roster.lua:700
-ILM.L["SK"] = "SK"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:989
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Audit.lua:130
 ILM.L["Same zone only"] = "仅限同一区域"
@@ -1905,7 +1894,6 @@ ILM.L["Search"] = "搜索"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:690
 ILM.L["Season of Discovery"] = "Season of Discovery"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1400
-ILM.L["Select DKP or EPGP point system."] = "选择 DKP 或 EPGP 分数系统。"
 -- IneptLootManager_Integrations/GUI.lua:374
 ILM.L["Select Profiles to export"] = "选择要导出的角色信息"
 -- IneptLootManager/Modules/Rosters/RosterManager/RosterManager.lua:448

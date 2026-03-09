@@ -728,15 +728,11 @@ ILM.L["Dynamic Item values"] = "Valeur d'objet dynamique"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Standings.lua:483
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Standings.lua:485
 -- IneptLootManager/Utils.lua:1058
-ILM.L["EP"] = "EP"
 -- IneptLootManager/Modules/Points/PointManager/PointManager.lua:557
 -- IneptLootManager/Utils.lua:1060
-ILM.L["EP/GP"] = "EP/GP"
 -- IneptLootManager/Modules/Rosters/RosterManager/ItemValueCalculator.lua:196
-ILM.L["EPGP WEB"] = "EPGP WEB"
 -- IneptLootManager/Modules/Rosters/RosterManager/Roster.lua:698
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1091
-ILM.L["EPGP"] = "EPGP"
 -- IneptLootManager_Integrations/GenericImport.lua:245
 -- IneptLootManager_Integrations/ImportCSV.lua:152
 ILM.L["ERROR - invalid import data"] = "Erreur - données d'importation non valides"
@@ -825,7 +821,6 @@ ILM.L["Executing migration even though ledger is not empty."] = "Exécuter la mi
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:532
 ILM.L["Exponent / Base"] = "Exposant / base"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:524
-ILM.L["Exponential scaling value used by the equations (Base for EPGPWeb, or Exponent for WoWpedia)"] = "Valeur de mise à l'échelle exponentielle utilisée par les équations (base pour epgpweb, ou exposant pour wowpedia)"
 -- IneptLootManager_Integrations/GUI.lua:397
 -- IneptLootManager_Integrations/GUI.lua:406
 -- IneptLootManager_Integrations/GUI.lua:483
@@ -926,7 +921,6 @@ ILM.L["GM"] = "GM"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_History.lua:385
 -- IneptLootManager/Tooltips.lua:121
 -- IneptLootManager/Utils.lua:1056
-ILM.L["GP"] = "GP"
 -- IneptLootManager/Modules/Points/AutoAwardManager/Encounters/EncounterIDs___Base.lua:130
 ILM.L["Gahz'ranka"] = "Gahz'ranka"
 -- IneptLootManager_Integrations/Integrations.lua:111
@@ -1378,10 +1372,8 @@ ILM.L["Minimal value increment for open auction mode."] = "Valeur minimale d’i
 -- IneptLootManager_Integrations/Migration.lua:91
 ILM.L["Minimap Icon -> Configuration -> Wipe events"] = "Icône de minicarte -> Configuration -> Effacer les événements"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1099
-ILM.L["Minimum GP used in calculations when player has less GP than this value."] = "GP minimum utilisés dans les calculs lorsque le joueur a moins de GP que cette valeur."
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1098
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Audit.lua:142
-ILM.L["Minimum GP"] = "GP minimum"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Profiles.lua:91
 ILM.L["Minimum Level"] = "Niveau minimum"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Profiles.lua:92
@@ -1611,10 +1603,8 @@ ILM.L["Overrides"] = "Paramètres"
 -- IneptLootManager/Modules/Auctioning/AuctionManager/AuctionManager.lua:1292
 ILM.L["PASS"] = "PASSE"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1107
-ILM.L["PR Rounding"] = "PR Arrondi"
 -- IneptLootManager/Modules/Auctioning/BiddingManager/MultiGUI.lua:1333
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Standings.lua:439
-ILM.L["PR"] = "PR"
 -- .:indirectly
 ILM.L["Paladin"] = "Paladin"
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Raids.lua:288
@@ -1879,7 +1869,6 @@ ILM.L["Rounding"] = "Arrondi"
 -- IneptLootManager/Modules/Points/AutoAwardManager/Encounters/EncounterIDs_1_Classic.lua:96
 ILM.L["Ruins of Ahn'Qiraj"] = "Ruines d'Ahn'Qiraj"
 -- IneptLootManager/Modules/Rosters/RosterManager/Roster.lua:700
-ILM.L["SK"] = "SK"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:989
 -- IneptLootManager/Modules/GUI/UnifiedGUI_Audit.lua:130
 ILM.L["Same zone only"] = "Même zone uniquement"
@@ -1905,7 +1894,6 @@ ILM.L["Search"] = "Chercher"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:690
 ILM.L["Season of Discovery"] = "Season of Discovery"
 -- IneptLootManager/Modules/Rosters/RosterManager/Options.lua:1400
-ILM.L["Select DKP or EPGP point system."] = "Sélectionner un système de point : DKP ou EPGP"
 -- IneptLootManager_Integrations/GUI.lua:374
 ILM.L["Select Profiles to export"] = "Sélectionnez les profils à exporter"
 -- IneptLootManager/Modules/Rosters/RosterManager/RosterManager.lua:448

@@ -138,9 +138,6 @@ local configDecodeFunctions = {
     minimumPoints = (function(value)
         return ILM.L["Minimum points (DKP / EP)"], safeToString(value)
     end),
-    minGP = (function(value)
-        return ILM.L["Minimum GP"], safeToString(value)
-    end),
     namedButtons = (function(value)
         return ILM.L["Named Buttons"], safeToString(value)
     end),
