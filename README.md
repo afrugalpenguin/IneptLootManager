@@ -20,7 +20,7 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 
 ### Auction Modes
 
-- Open, closed, and Vickrey bid systems
+- Open or closed bidding systems.
 - Anonymous bidding support
 - Static, ascending, and tiered item value systems
 - Anti-snipe protection
