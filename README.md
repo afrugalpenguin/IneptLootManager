@@ -6,7 +6,7 @@ TBC Anniversary Classic fork of [Core Loot Manager](https://github.com/ClassicLo
 
 Inept Loot Manager is a robust loot tracking and awarding tool for guilds running TBC Anniversary Classic. It uses **DKP** with automatic data synchronisation across your guild.
 
-This fork has been stripped down to target TBC Anniversary Classic exclusively (Interface 20505).
+This fork has been stripped down to target TBC Anniversary Classic exclusively (Interface 20505), and DKP only.
 
 ## Features
 
@@ -50,6 +50,29 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 ## Installation
 
 Copy the `IneptLootManager/` folder into your `Interface/AddOns/` directory.
+
+## Bundled Libraries
+
+ILM bundles the following libraries. Thanks to their authors for making them available:
+
+| Library | Author(s) | License |
+|---------|-----------|---------|
+| [Ace3](http://www.wowace.com) | Ace3 Development Team | Limited BSD |
+| AceGUI-3.0-SharedMediaWidgets | Yssaril | — |
+| CallbackHandler-1.0 | Ace3 Development Team | Limited BSD |
+| LibCandyBar-3.0 | Ammo, Funkydude, Rabbit | — |
+| LibDataBroker-1.1 | Tekkub | Public Domain |
+| [LibDBIcon-1.0](https://www.curseforge.com/wow/addons/libdbicon-1-0) | Funkydude | GPLv2+ |
+| [LibDeflate](https://github.com/SafeteeWoW/LibDeflate) | Haoqian He (SafeteeWoW) | zlib |
+| [LibDeformat-3.0](http://www.wowace.com/projects/libdeformat-3-0/) | ckknight | MIT |
+| LibEventDispatcher | [Sam Mousa](https://github.com/SamMousa) | — |
+| LibEventSourcing | [Sam Mousa](https://github.com/SamMousa) | — |
+| [LibLogger](https://github.com/ClassicLootManager/LibLogger) | Lantis | MIT |
+| [LibSerialize](https://github.com/rossnichols/LibSerialize) | Ross Nichols | MIT |
+| [LibSharedMedia-3.0](http://www.wowace.com/projects/libsharedmedia-3-0/) | Elkano | LGPL v2.1 |
+| [lib-st](https://www.wowace.com/projects/lib-st) | Dan Dumont | GPLv3+ |
+| [LibStub](http://www.wowace.com/wiki/LibStub) | Kaelten, Cladhaire, ckknight, Mikk, Ammo, Nevcairiel, joshborke | Public Domain |
+| LibUIDropDownMenu | Numy (fork) | GPLv2 |
 
 ## License
 
