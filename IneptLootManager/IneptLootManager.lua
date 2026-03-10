@@ -187,14 +187,6 @@ function CORE:_InitializeExternal()
     return true
 end
 
-function CORE:_InitializeMinimap()
-    LOG:Trace("CORE:_InitializeMinimap()")
-    -- Initialize Minmap
-    MODULES.Minimap:Initialize()
-
-    return true
-end
-
 function CORE:_InitializeOptions()
     LOG:Trace("CORE:_InitializeOptions()")
     -- No GUI / OPTIONS should be dependent on each other ever, only on the managers
@@ -234,7 +226,6 @@ local stages = {
     { name = "_InitializeDatabase", retry = true },
     { name = "_InitializeCore",     retry = false},
     { name = "_InitializeBackend",  retry = false},
-    { name = "_InitializeMinimap",  retry = false},
     { name = "_InitializeFeatures", retry = false},
     { name = "_InitializeOptions",  retry = false},
     { name = "_InitializeGUI",      retry = false},

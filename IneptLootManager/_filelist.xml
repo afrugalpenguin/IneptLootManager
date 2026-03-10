@@ -4,7 +4,6 @@
 	<Script file="IneptLootManager.lua"/>
 	<Script file="Utils.lua"/>
 	<Include file="Modules\_filelist.xml"/>
-	<Script file="MinimapIcon.lua"/>
 	<Script file="ControlPanel.lua"/>
 	<Script file="CLMImport.lua"/>
 	<Script file="Tooltips.lua"/>

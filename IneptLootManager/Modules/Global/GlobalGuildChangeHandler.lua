@@ -20,7 +20,6 @@ function GlobalGuildChangeHandler:Initialize()
         ILM.MODULES.LedgerManager:DisableAdvertising()
         ILM.MODULES.Database:ForceFallback()
         ILM.MODULES.TrustInfoProvider:WipeAll()
-        ILM.MODULES.Minimap:UpdateIcon()
         GlobalGuildChangeHandler.changeDetected = true
         GlobalGuildChangeHandler.isInGuild = IsInGuild()
     end)

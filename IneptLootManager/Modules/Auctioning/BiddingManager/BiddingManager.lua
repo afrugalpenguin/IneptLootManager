@@ -144,20 +144,12 @@ end
 
 local PlayStartSound, PlayEndSound
 PlayStartSound = function()
-    if ILM.AF then
-        PlaySoundFile("Interface\\AddOns\\IneptLootManager\\Media\\Audio\\lifestock_auction.ogg", "MASTER")
-    else
-        if not ILM.GlobalConfigs:GetSounds() then return end
-        PlaySound(12889)
-    end
+    if not ILM.GlobalConfigs:GetSounds() then return end
+    PlaySound(12889)
 end
 PlayEndSound = function()
-    if ILM.AF then
-        PlaySoundFile("Interface\\AddOns\\IneptLootManager\\Media\\Audio\\lifestock_auction_sold.ogg", "MASTER")
-    else
-        if not ILM.GlobalConfigs:GetSounds() then return end
-        PlaySound(12867)
-    end
+    if not ILM.GlobalConfigs:GetSounds() then return end
+    PlaySound(12867)
 end
 
 local function DefaultCallback(_)
