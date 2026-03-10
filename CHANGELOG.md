@@ -8,6 +8,8 @@
 - Manager Control Panel
 - All libraries bundled directly — no external dependencies
 - CI/CD via BigWigs packager and GitHub Actions
+- Additional bar textures moved into Media
+- Release checklist and process documentation
 
 **v0.9.0**
 
