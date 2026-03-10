@@ -54,7 +54,7 @@ function GlobalConfigs:Initialize()
         },
         author = {
             type = "description",
-            name = [=[created by |cffe6cc80Castborn|r]=],
+            name = [=[forked by |cffe6cc80Castborn|r]=],
             fontSize = "large",
             descStyle = "inline",
             width = 3,
