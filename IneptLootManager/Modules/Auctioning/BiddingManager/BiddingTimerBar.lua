@@ -42,7 +42,9 @@ local function Create(self, item, auction, options)
     }
     self.bar = LibCandyBar:New(self.options.texture, self.options.width, self.options.height)
 
-    self.bar:SetFont(SharedMedia:Fetch("font", self.options.fontName), self.options.fontSize)
+    local font = SharedMedia:Fetch("font", self.options.fontName) or DEFAULT_FONT_NAME
+    self.bar.candyBarLabel:SetFont(font, self.options.fontSize)
+    self.bar.candyBarDuration:SetFont(font, self.options.fontSize)
 
     local duration = auction:GetEndTime() - GetServerTime()
     self.bar:SetDuration(duration)
