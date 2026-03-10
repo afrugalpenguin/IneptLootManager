@@ -105,9 +105,9 @@ local function GenerateItemOptions(self)
                 if v and UTILS.GetItemInfoInstant(v) then -- validate if it is an itemLink or itemString or itemId
                     local itemID = UTILS.GetItemInfoInstant(v)
                     if tostring(itemID) == v then
-                        ILM.MODULES.AuctionManager:AddItemById(itemID, function(ai) self:SetVisibleAuctionItem(ai) end)
+                        ILM.MODULES.AuctionManager:AddItemById(itemID, function(ai) C_Timer.After(0, function() self:SetVisibleAuctionItem(ai) end) end)
                     else
-                        ILM.MODULES.AuctionManager:AddItemByLink(v, function(ai) self:SetVisibleAuctionItem(ai) end)
+                        ILM.MODULES.AuctionManager:AddItemByLink(v, function(ai) C_Timer.After(0, function() self:SetVisibleAuctionItem(ai) end) end)
                     end
                 end
             end),

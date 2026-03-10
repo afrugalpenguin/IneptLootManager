@@ -772,15 +772,15 @@ function AuctionManager:StartAuction()
     end
     -- Auction parameters sanity checks
     if not typeof(auction.raid, ILM.MODELS.Raid) then
-        LOG:Warning("AuctionManager:StartAuction(): Invalid raid object")
+        LOG:Message(ILM.L["You must be in a raid to start an auction."])
         return false
     end
     if not ILM.MODULES.RaidManager:IsInProgressingRaid() then
-        LOG:Warning("AuctionManager:StartAuction(): Raid not in Progress")
+        LOG:Message(ILM.L["You must start the raid before auctioning items."])
         return false
     end
     if auction:IsEmpty() then
-        LOG:Warning("AuctionManager:StartAuction(): Empty auction item list")
+        LOG:Message(ILM.L["No items to auction."])
         return false
     end
     -- Auction Settings sanity checks

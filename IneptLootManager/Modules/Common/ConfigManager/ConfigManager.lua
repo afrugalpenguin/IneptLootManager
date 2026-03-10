@@ -94,7 +94,31 @@ function ConfigManager:RegisterSlash(options)
         end
     end
 
-    AceConfig:RegisterOptionsTable("ILM", self.slash_options, {"ilm", "ineptlootmanager"})
+    -- Custom slash handler: /ilm opens GUI, /ilm help lists commands
+    SLASH_ILM1 = "/ilm"
+    SLASH_ILM2 = "/ineptlootmanager"
+    SlashCmdList["ILM"] = function(msg)
+        msg = strtrim(msg or "")
+        if msg == "" then
+            -- No args: open main GUI
+            if ILM.GUI.Unified then
+                ILM.GUI.Unified:Toggle()
+            end
+            return
+        end
+        if msg == "help" then
+            LOG:Message("|cffdcb749/ilm|r - Open main window")
+            LOG:Message("|cffdcb749/ilm help|r - Show this list")
+            for name, def in pairs(self.slash_options.args) do
+                local desc = def.name or name
+                LOG:Message("|cffdcb749/ilm %s|r - %s", name, desc)
+            end
+            return
+        end
+        -- Delegate to AceConfig for subcommands
+        AceConfig:RegisterOptionsTable("ILM_slash", self.slash_options, {})
+        LibStub("AceConfigCmd-3.0"):HandleCommand("ilm", "ILM_slash", msg)
+    end
     return true
 end
 
