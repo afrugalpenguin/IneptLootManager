@@ -11,9 +11,10 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 ## Features
 
 - **DKP point system** with fine-grained configuration
-- **Auto synchronisation** within and across guilds
+- **Auto synchronisation** within your guild
 - **Multiple roster (team) support** with independent configurations
 - **Multiple item auction** — auction any number of items in a single auction
+- **Simplified bidding UI** — clean bid/pass interface with minimum bid display
 - **Alt-main linking** and **profile locking**
 - **Multi-level access control** — Managers, Assistants, and Members
 
@@ -22,16 +23,14 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 - Open, closed, and Vickrey bid systems
 - Anonymous bidding support
 - Static, ascending, and tiered item value systems
-- Named buttons for custom loot system workflows
 - Anti-snipe protection
 - Auction from corpse or bag (default: alt-click)
 
 ### Point Awards
 
 - On-time, raid completion, and interval bonuses
-- Boss kill bonuses (configurable per boss)
+- Boss kill bonuses (configurable per TBC boss)
 - Configurable weekly and hard point caps
-- Zero-Sum Bank mode, inflation, and taxation
 
 ### Administration
 
@@ -42,7 +41,9 @@ This fork has been stripped down to target TBC Anniversary Classic exclusively (
 
 ## Slash Commands
 
-- `/ilm` — Open configuration
+- `/ilm` — Open main window
+- `/ilm help` — List all available commands
+- `/ilm bid` — Toggle bidding window
 - `/ilm award [item]` — Award item GUI
 - `/ilm guireset` — Reset GUI position
 
