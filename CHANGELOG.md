@@ -1,3 +1,14 @@
+**v1.0.0**
+
+- First public release of Inept Loot Manager
+- TBC Anniversary Classic fork of Core Loot Manager — DKP only
+- Full rebrand from CLM to ILM (code, UI, slash commands, SavedVariables)
+- Simplified bidding UI, auction settings, and roster configuration
+- CLM JSON import (/ilm import) with standings, point history, and loot history
+- Manager Control Panel
+- All libraries bundled directly — no external dependencies
+- CI/CD via BigWigs packager and GitHub Actions
+
 **v0.9.0**
 
 - Flatten addon files to repo root for BigWigs packager compatibility
