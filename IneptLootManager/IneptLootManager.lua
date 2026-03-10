@@ -158,7 +158,7 @@ function CORE:_InitializeFeatures()
     MODULES.AutoAwardManager:Initialize()
     MODULES.AuctionHistoryManager:Initialize()
     MODULES.SandboxManager:Initialize()
-    MODULES.CrossGuildSyncManager:Initialize()
+
     -- Globals
     ILM.GlobalConfigs:Initialize() -- Initialize global configs
     ILM.GlobalSlashCommands:Initialize() -- Initialize global slash handlers
