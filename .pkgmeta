@@ -1,47 +1,20 @@
 package-as: IneptLootManager
 
-externals:
-  IneptLootManager/Libs/LibStub:
-    url: https://repos.wowace.com/wow/libstub/trunk
-    tag: 1.0
-  IneptLootManager/Libs/Ace3:
-    url: https://repos.wowace.com/wow/ace3/trunk
-  IneptLootManager/Libs/CallbackHandler-1.0:
-    url: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
-    tag: latest
-  IneptLootManager/Libs/lib-st:
-    url: https://github.com/ddumont/lib-st
-    tag: v4.1.3
-  IneptLootManager/Libs/LibCandyBar-3.0:
-    url: https://repos.wowace.com/wow/libcandybar-3-0/trunk
-    tag: latest
-  IneptLootManager/Libs/LibLogger:
-    url: https://github.com/lantisnt/LibLogger
-    tag: latest
-  IneptLootManager/Libs/LibDBIcon-1.0:
-    url: https://repos.wowace.com/wow/libdbicon-1-0/trunk
-    tag: latest
-  IneptLootManager/Libs/LibDeflate:
-    url: https://github.com/SafeteeWoW/LibDeflate
-    tag: 1.0.2-release
-  IneptLootManager/Libs/LibSerialize:
-    url: https://github.com/rossnichols/LibSerialize
-    tag: v1.1.3
-  IneptLootManager/Libs/LibUIDropDownMenu:
-    url: https://repos.wowace.com/wow/libuidropdownmenu/trunk
-  IneptLootManager/Libs/LibSharedMedia-3.0:
-    url: https://repos.curseforge.com/wow/libsharedmedia-3-0/trunk/LibSharedMedia-3.0
-  IneptLootManager/Libs/AceGUI-3.0-SharedMediaWidgets:
-    url: https://repos.curseforge.com/wow/ace-gui-3-0-shared-media-widgets/trunk/AceGUI-3.0-SharedMediaWidgets
-
-ignore:
-  - scripts
-  - assets
-  - gitman.yml
-
-move-folders:
-  IneptLootManager/IneptLootManager: IneptLootManager
-
 manual-changelog:
   filename: CHANGELOG.md
   markup-type: markdown
+
+ignore:
+  - images
+  - README.md
+  - CHANGELOG.md
+  - CLAUDE.md
+  - NOTICE
+  - .gitignore
+  - .pkgmeta
+  - .github
+  - "*.svg"
+  - "*.png"
+  - docs
+  - tests
+  - .luacheckrc
