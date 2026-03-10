@@ -443,13 +443,22 @@ local function default_slot_values(self, roster)
             name = slot.name
         }
         order = order + 1
-        args[prefix .. "_icon"] = {
-            name = "",
-            type = "description",
-            image = slot.icon,
-            order = order,
-            width = 0.5
-        }
+        if slot.type == "_GLOBAL" then
+            args[prefix .. "_spacer"] = {
+                name = " ",
+                type = "description",
+                order = order,
+                width = 0.5
+            }
+        else
+            args[prefix .. "_icon"] = {
+                name = "",
+                type = "description",
+                image = slot.icon,
+                order = order,
+                width = 0.5
+            }
+        end
         order = order + 1
         for _, ivalues in ipairs(valuesWithDesc) do
             args[prefix .. "_" .. ivalues.type] = {
@@ -662,14 +671,7 @@ local function generateBossKillAwardValueInputField(self, roster, info, instance
 end
 
 local expansionInfoMap = {
-    [LE_EXPANSION_CLASSIC]                  = { name = ILM.L["Classic"],                offset =  10000 },
-    [LE_EXPANSION_BURNING_CRUSADE]          = { name = ILM.L["The Burning Crusade"],    offset =  20000 },
-    [LE_EXPANSION_WRATH_OF_THE_LICH_KING]   = { name = ILM.L["Wrath of the Lich King"], offset =  30000 },
-    [LE_EXPANSION_CATACLYSM]                = { name = ILM.L["Cataclysm"],              offset =  40000 },
-    [LE_EXPANSION_MISTS_OF_PANDARIA]        = { name = ILM.L["Mists of Pandaria"],      offset =  50000 },
-    [LE_EXPANSION_DRAGONFLIGHT]             = { name = ILM.L["Dragonflight"],           offset = 100000 },
-    [LE_EXPANSION_WAR_WITHIN]               = { name = ILM.L["The War Within"],         offset = 110000 },
-    ["SOD"]                                 = { name = ILM.L["Season of Discovery"],    offset = 990000 },
+    [LE_EXPANSION_BURNING_CRUSADE]          = { name = "TBC Anniversary",    offset =  20000 },
 }
 
 local function boss_kill_award_values(self, roster, name)
@@ -1154,13 +1156,6 @@ function RosterManagerOptions:GenerateRosterOptions(name)
                 type = "group",
                 order = 3,
                 args = default_slot_values(self, roster)
-            },
-            award_multipliers = {
-                name = ILM.L["Award"] .. " " .. ILM.L["Multiplier"],
-                type = "group",
-                order = 4,
-                childGroups = "tab",
-                args = award_multipliers(self, roster)
             },
             item_value_overrides = {
                 name = ILM.L["Item value overrides"],

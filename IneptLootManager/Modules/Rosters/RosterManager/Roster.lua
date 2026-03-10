@@ -747,9 +747,9 @@ CONSTANTS.INVENTORY_TYPES_SORTED = {
     { type = "INVTYPE_NECK",                name = ILM.L["Neck"],              icon = 136519 },
     { type = "INVTYPE_SHOULDER",            name = ILM.L["Shoulder"],          icon = 136526 },
     { type = "INVTYPE_BODY",                name = ILM.L["Shirt"],             icon = 136525 },
-    { type = "INVTYPE_CLOAK",               name = ILM.L["Back"],              icon = 136525 },
-    { type = "INVTYPE_CHEST",               name = ILM.L["Chest"],             icon = 136525 },
-    { type = "INVTYPE_ROBE",                name = ILM.L["Chest (robes)"],     icon = 136525 },
+    { type = "INVTYPE_CLOAK",               name = ILM.L["Back"],              icon = 136512 },
+    { type = "INVTYPE_CHEST",               name = ILM.L["Chest"],             icon = 136512 },
+    { type = "INVTYPE_ROBE",                name = ILM.L["Chest (robes)"],     icon = 136512 },
     { type = "INVTYPE_TABARD",              name = ILM.L["Tabard"],            icon = 136527 },
     { type = "INVTYPE_WRIST",               name = ILM.L["Wrist"],             icon = 136530 },
     { type = "INVTYPE_HAND",                name = ILM.L["Hands"],             icon = 136515 },
@@ -769,7 +769,7 @@ CONSTANTS.INVENTORY_TYPES_SORTED = {
     { type = "INVTYPE_NON_EQUIP",           name = ILM.L["Non-equippable"],    icon = 136511 },
     { type = "INVTYPE_BAG",                 name = ILM.L["Bag"],               icon = 136511 },
     { type = "INVTYPE_AMMO",                name = ILM.L["Ammo"],              icon = 136510 },
-    { type = "INVTYPE_THROWN",              name = ILM.L["Thrown"],            icon = 136522 },
+    { type = "INVTYPE_THROWN",              name = ILM.L["Thrown"],            icon = 136520 },
     { type = "INVTYPE_QUIVER",              name = ILM.L["Quiver"],            icon = 136522 },
     { type = "INVTYPE_RELIC",               name = ILM.L["Relic"],             icon = 136522 }
 }
