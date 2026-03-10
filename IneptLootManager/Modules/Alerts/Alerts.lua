@@ -1,3 +1,4 @@
+local _, ILM = ...
 if not ILM then return end
 
 local eventDispatcher = LibStub("EventDispatcher")

@@ -5,3 +5,6 @@ luacheck.exe
 *.zip
 docs/
 CLMExport.json
+clmexport*.json
+.release/
+IneptLootManager/Media/Icons/svg/

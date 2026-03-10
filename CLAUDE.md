@@ -1,6 +1,6 @@
-# CoreLootManager
+# IneptLootManager
 
-WoW TBC Anniversary Classic fork of Inept Loot Manager — DKP and EPGP based loot management system.
+WoW TBC Anniversary Classic fork of [Core Loot Manager](https://github.com/ClassicLootManager/ClassicLootManager) — DKP based loot management system.
 
 <!-- ============================================================
      STANDARD WOW ADDON FRAMEWORK
@@ -291,7 +291,7 @@ When asked to "do a release" or bump version, follow the checklist in `RELEASE.m
 
 ## Testing
 
-- **luacheck**: Run `luacheck .` from the project root. The `luacheck.exe` binary is included.
+- **luacheck**: Run `luacheck .` from the project root. Binary is in `~/bin/luacheck`.
 
 ## Debugging Rules
 
@@ -311,15 +311,16 @@ When asked to "do a release" or bump version, follow the checklist in `RELEASE.m
 
 ## ILM Architecture
 
-CoreLootManager is built on the Ace3 framework with an event sourcing architecture for guild loot management.
+Inept Loot Manager is built on the Ace3 framework with an event sourcing architecture for guild loot management. It is a single addon (no sub-addons).
 
 - **IneptLootManager/** — Main addon directory
+  - **IneptLootManager.toc** — TOC file (Interface 20505)
   - **IneptLootManager.lua** — Entry point. Global `ILM` table, module registry, initialization pipeline.
   - **Utils.lua** — Utility functions
   - **MinimapIcon.lua** — DataBroker minimap icon
-  - **Tooltips.lua** — Tooltip enhancements for item DKP/GP values
+  - **Tooltips.lua** — Tooltip enhancements for item DKP values
   - **_filelist.xml** — File include list
-  - **Libs/** — External libraries (Ace3, LibStub, lib-st, LibDeflate, LibSerialize, etc.)
+  - **Libs/** — Bundled libraries (Ace3, LibStub, lib-st, LibDeflate, LibSerialize, etc.)
   - **Locale/** — Localization files
   - **Media/** — Icons, audio, bar textures
   - **Modules/** — Core functionality organized by domain:
@@ -333,9 +334,8 @@ CoreLootManager is built on the Ace3 framework with an event sourcing architectu
     - **Auctioning/** — AuctionManager, BiddingManager, AutoAssign, AuctionHistoryManager
     - **Ledger/** — LedgerManager, SandboxManager, CrossGuildSyncManager
     - **GUI/** — UnifiedGUI (main window), Filters, custom AceGUI widgets
-- **IneptLootManager_Alerts/** — Optional addon for alert notifications
-- **IneptLootManager_Tracker/** — Optional addon for item tracking
-- **IneptLootManager_Integrations/** — Optional addon for export (import/migration removed)
+    - **Alerts/** — Alert notifications (point received, bid accepted/denied)
+    - **Tracker/** — Item tracking, tracker tooltips, auction column extensions
 
 ### Global Namespace
 
@@ -382,18 +382,24 @@ This is a TBC-only fork. `ILM.GetExpansion()` always returns `LE_EXPANSION_BURNI
 
 This fork has been stripped to TBC Anniversary only:
 
-- **TOC files**: All set to Interface `20505` only (no multi-Interface).
+- **Rename**: All code references, UI strings, slash commands, SavedVariables renamed from CLM → ILM.
+- **TOC files**: Single TOC, Interface `20505` only (no multi-Interface).
 - **Version detection**: Hardcoded to TBC. No expansion checks remain.
 - **Encounter data**: Only TBC raids (Karazhan, Gruul, Mag, SSC, TK, BT, Hyjal, ZA, Sunwell, plus ZG/AQ20).
 - **Classes**: TBC 9 classes only (no DK, Monk, DH, Evoker).
+- **Point systems**: DKP only. EPGP and SK completely removed.
 - **Roll types**: No disenchant or transmog roll types.
-- **Integrations**: Import/migration removed. JSON export preserved.
+- **Sub-addons merged**: Alerts and Tracker folded into the core addon. No separate sub-addons.
+- **Integrations removed**: The Integrations sub-addon (import/migration/export) has been removed entirely.
+- **Libraries bundled**: All library dependencies are committed directly in `Libs/`. No BigWigs packager or SVN required.
 - **Alerts**: Uses built-in AlertFrame system (available on modern client backbone).
 - **APIs**: TBC Anniversary runs on the modern WoW client backbone, so C_Container, C_GuildInfo, Enum.ItemClass, ItemMixin, and Item:CreateFromItemID all work natively.
+- **GitHub**: Remote is `https://github.com/afrugalpenguin/IneptLootManager`. Default branch is `master`.
 
 ## ILM Conventions
 
-- **Module registration**: `ILM.RegisterModule(name, entryPoint)` for core modules, `ILM.RegisterExternal(name, entryPoint)` for external addons.
+- **Module registration**: `ILM.RegisterModule(name, entryPoint)` for core modules, `ILM.RegisterExternal(name, entryPoint)` for external/late-init modules.
+- **Tracker shared state**: `ILM._TRACKER` table holds Tracker-internal modules and constants (replaces the old sub-addon private namespace).
 - **SavedVariables**: `ILM2_DB` (main database), `ILM2_Logs` (event logs), `ILM2_MinimapIcon` (icon position).
 - **Naming**: Module files use PascalCase. The global table is `ILM`. Local aliases use SCREAMING_CASE (`CORE`, `LOG`, `MODULES`, `UTILS`).
 - **GUI**: Built on AceGUI-3.0 with custom widgets. Main window is `UnifiedGUI` with tab-based navigation.
