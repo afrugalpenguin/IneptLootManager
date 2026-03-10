@@ -997,7 +997,6 @@ local function ValidateBid(auction, uid, item, name, userResponse)
         return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.INVALID_ITEM
     end
     local auctionType = auction:GetType()
-    local itemValueMode = auction:GetMode()
     local roster = auction:GetRoster()
     local values = item:GetValues()
     local isDKP  = roster:GetPointType() == CONSTANTS.POINT_TYPE.DKP
@@ -1015,8 +1014,7 @@ local function ValidateBid(auction, uid, item, name, userResponse)
     if userResponse:Type() == CONSTANTS.BID_TYPE.PASS then
         if auction:GetAllowCancelPass() then return true end
         -- only allow passing if no bids have been placed in open auctions
-        if (itemValueMode == CONSTANTS.ITEM_VALUE_MODE.ASCENDING) and
-            CONSTANTS.AUCTION_TYPES_OPEN[auctionType] and
+        if CONSTANTS.AUCTION_TYPES_OPEN[auctionType] and
             auction:HasBids(uid, name) then
             return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.PASSING_NOT_ALLOWED
         else
@@ -1041,63 +1039,55 @@ local function ValidateBid(auction, uid, item, name, userResponse)
     if (new < minimumPoints) and not auction:GetAllowBelowMinStandings() and isDKP then
         return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.NEGATIVE_STANDING_AFTER
     end
-    -- bid value
-    if itemValueMode == CONSTANTS.ITEM_VALUE_MODE.ASCENDING then
-        -- ascending
-        -- always allow bidding base in ascending mode but ONLY if player haven't bid yet
+    -- bid value (ascending mode)
+    -- always allow bidding base but ONLY if player haven't bid yet
+    if not auction:HasBids(uid, name) then
+        if (value == 0) and auction:GetAlwaysAllow0() then
+            return true
+        end
+    end
+    -- min
+    if values[CONSTANTS.SLOT_VALUE_TIER.BASE] > 0 and value < values[CONSTANTS.SLOT_VALUE_TIER.BASE] then return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_VALUE_TOO_LOW end
+    -- max
+    if values[CONSTANTS.SLOT_VALUE_TIER.MAX] > 0 and value > values[CONSTANTS.SLOT_VALUE_TIER.MAX] then
+        return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_VALUE_TOO_HIGH
+    end
+    -- open bid ascending
+    if CONSTANTS.AUCTION_TYPES_OPEN[auctionType] then
+        -- Do not allow swapping from OS to MS
+        local currentResponse = item:GetResponse(name)
+        if currentResponse then
+            -- Do not allow changing Main Spec bid to Off Spec
+            if currentResponse:Type() == CONSTANTS.BID_TYPE.MAIN_SPEC and
+                  userResponse:Type() == CONSTANTS.BID_TYPE.OFF_SPEC then
+                return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.SPEC_CHANGE
+            end
+        end
+        if not isDKP then
+            return true
+        end
+        if auction:GetAlwaysAllowAllInBids() and (current == value) then
+            return true
+        end
+        -- always allow bidding base but ONLY if player haven't bid yet
         if not auction:HasBids(uid, name) then
-            if (value == 0) and auction:GetAlwaysAllow0() then
+            if value == values[CONSTANTS.SLOT_VALUE_TIER.BASE] and auction:GetAlwaysAllowBaseBids() then
                 return true
             end
         end
-        -- min
-        if values[CONSTANTS.SLOT_VALUE_TIER.BASE] > 0 and value < values[CONSTANTS.SLOT_VALUE_TIER.BASE] then return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_VALUE_TOO_LOW end
-        -- max
-        if values[CONSTANTS.SLOT_VALUE_TIER.MAX] > 0 and value > values[CONSTANTS.SLOT_VALUE_TIER.MAX] then
-            return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_VALUE_TOO_HIGH
+        if value == item:GetHighestBid() then
+            if auction:GetAllowEqualBids() then
+                return true
+            end
         end
-        -- open bid ascending
-        if CONSTANTS.AUCTION_TYPES_OPEN[auctionType] then
-            -- Do not allow swapping from OS to MS
-            local currentResponse = item:GetResponse(name)
-            if currentResponse then
-                -- Do not allow changing Main Spec bid to Off Spec
-                if currentResponse:Type() == CONSTANTS.BID_TYPE.MAIN_SPEC and
-                      userResponse:Type() == CONSTANTS.BID_TYPE.OFF_SPEC then
-                    return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.SPEC_CHANGE
-                end
-            end
-            if not isDKP then
-                return true
-            end
-            if auction:GetAlwaysAllowAllInBids() and (current == value) then
-                return true
-            end
-            -- always allow bidding base in ascending mode but ONLY if player haven't bid yet
-            if not auction:HasBids(uid, name) then
-                if value == values[CONSTANTS.SLOT_VALUE_TIER.BASE] and auction:GetAlwaysAllowBaseBids() then
-                    return true
-                end
-            end
-            if value == item:GetHighestBid() then
-                if auction:GetAllowEqualBids() then
-                    return true
-                end
-            end
 
-            if value < item:GetHighestBid() then
-                return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_VALUE_TOO_LOW
-            end
-
-            if UTILS.round(value - item:GetHighestBid(), auction:GetRounding()) < auction:GetIncrement() then
-                return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_INCREMENT_TOO_LOW
-            end
+        if value < item:GetHighestBid() then
+            return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_VALUE_TOO_LOW
         end
-    elseif itemValueMode == CONSTANTS.ITEM_VALUE_MODE.TIERED then
-        if not item:IsValueAccepted(value) then return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_VALUE_INVALID end
-    else
-        -- single-priced
-        if values[CONSTANTS.SLOT_VALUE_TIER.BASE] ~= value then return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_VALUE_INVALID end
+
+        if UTILS.round(value - item:GetHighestBid(), auction:GetRounding()) < auction:GetIncrement() then
+            return false, CONSTANTS.AUCTION_COMM.DENY_BID_REASON.BID_INCREMENT_TOO_LOW
+        end
     end
     -- accept otherwise
     return true
@@ -1160,7 +1150,7 @@ local function AnnounceBid(auction, uid, name, userResponse, newHighBid)
     message = string.format(ILM.L["New highest bid on %s: %s %s %s"],
                         auction:GetItemByUID(uid):GetItemLink(),
                         userResponse:Value(),
-                        auction:GetRoster():GetPointType() == CONSTANTS.POINT_TYPE.DKP and ILM.L["DKP"] or ILM.L["GP"],
+                        ILM.L["DKP"],
                         nameModdified)
     UTILS.SendChatMessage(message, CHAT_MESSAGE_CHANNEL)
 end
@@ -1382,25 +1372,15 @@ function AuctionManager:FakeBids()
             if     bidType < 10 then -- none
             elseif bidType < 50 then -- value
                 -- local namedButtons = roster:GetConfiguration("namedButtons")
-                -- local auctionType = roster:GetConfiguration("auctionType")
-                local itemValueMode = roster:GetConfiguration("itemValueMode")
                 local values = auctionItem:GetValues()
                 local items = {}
                 local bid
                 for _=1,math.random(1,2) do
                     items[#items+1] = math.random(44000, 55000)
                 end
-                if itemValueMode == CONSTANTS.ITEM_VALUE_MODE.ASCENDING then
-                    local min, max = values[CONSTANTS.SLOT_VALUE_TIER.BASE], values[CONSTANTS.SLOT_VALUE_TIER.MAX]
-                    if max <= 0 then max = 10000 end
-                    bid = ILM.MODELS.BiddingCommSubmitBid:New(math.random(min, max), math.random(1,2), auctionItem:GetItemID(), items)
-                elseif itemValueMode == CONSTANTS.ITEM_VALUE_MODE.TIERED then
-                    local r = {"b", "s", "m", "l", "x"}
-                    local t = math.random(1,5)
-                    bid = ILM.MODELS.BiddingCommSubmitBid:New(values[r[t]], r[t], auctionItem:GetItemID(), items)
-                else
-                    bid = ILM.MODELS.BiddingCommSubmitBid:New(values[CONSTANTS.SLOT_VALUE_TIER.BASE], math.random(1,2), auctionItem:GetItemID(), items)
-                end
+                local min, max = values[CONSTANTS.SLOT_VALUE_TIER.BASE], values[CONSTANTS.SLOT_VALUE_TIER.MAX]
+                if max <= 0 then max = 10000 end
+                bid = ILM.MODELS.BiddingCommSubmitBid:New(math.random(min, max), math.random(1,2), auctionItem:GetItemID(), items)
                 self:HandleSubmitBid(bid, bidder)
             elseif bidType < 55 then -- pass
                 -- self:HandleNotifyPass(nil, bidder)

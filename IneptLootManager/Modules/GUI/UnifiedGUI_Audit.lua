@@ -54,8 +54,8 @@ local configDecodeFunctions = {
     auctionType = (function(value)
         return ILM.L["Auction Type"], CONSTANTS.AUCTION_TYPES_GUI[value] or ""
     end),
-    itemValueMode = (function(value)
-        return ILM.L["Item value mode"], CONSTANTS.ITEM_VALUE_MODES_GUI[value] or ""
+    itemValueMode = (function()
+        return ILM.L["Item value mode"], ILM.L["Ascending"]
     end),
     zeroSumBank = (function(value)
         return ILM.L["Zero-Sum Bank"], boolToString(value)
@@ -700,8 +700,8 @@ local tableStructure = {
     columns = {
         {name = ILM.L["Num"],          width = 40, sort = LibStub("ScrollingTable").SORT_DSC},
         {name = ILM.L["Time"],         width = 140},
-        {name = ILM.L["Type"],         width = 30},
-        {name = ILM.L["Description"],  width = 330},
+        {name = "",                    width = 1},
+        {name = ILM.L["Description"],  width = 359},
         {name = ILM.L["Author"],       width = 80}
     },
     -- Function to filter ScrollingTable

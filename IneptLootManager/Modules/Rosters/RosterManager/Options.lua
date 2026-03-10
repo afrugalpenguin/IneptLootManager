@@ -188,18 +188,6 @@ function RosterManagerOptions:Initialize()
         auction_auction_type_set = (function(name, value)
             SetRosterOption(name, "auctionType", value)
         end),
-        auction_item_value_mode_get = (function(name)
-            return GetRosterOption(name, "itemValueMode")
-        end),
-        auction_item_value_mode_set = (function(name, value)
-            SetRosterOption(name, "itemValueMode", value)
-        end),
-        auction_dynamic_item_values_get = (function(name)
-            return GetRosterOption(name, "dynamicValue")
-        end),
-        auction_dynamic_item_values_set = (function(name, value)
-            SetRosterOption(name, "dynamicValue", value)
-        end),
         auction_base_always_get = (function(name)
             return GetRosterOption(name, "baseAlways")
         end),
@@ -235,18 +223,6 @@ function RosterManagerOptions:Initialize()
         end),
         auction_use_os_set = (function(name, value)
             SetRosterOption(name, "useOS", value)
-        end),
-        auction_zero_sum_bank_get = (function(name)
-            return GetRosterOption(name, "zeroSumBank")
-        end),
-        auction_zero_sum_bank_set = (function(name, value)
-            SetRosterOption(name, "zeroSumBank", value)
-        end),
-        auction_zero_sum_bank_inflation_value_get = (function(name)
-            return tostring(GetRosterOption(name, "zeroSumBankInflation"))
-        end),
-        auction_zero_sum_bank_inflation_value_set = (function(name, value)
-            SetRosterOption(name, "zeroSumBankInflation", value)
         end),
         auction_allow_below_min_standings_get = (function(name)
             return GetRosterOption(name, "allowBelowMinStandings")
@@ -377,59 +353,14 @@ end
 local valuesWithDesc = {
     {
         type = CONSTANTS.SLOT_VALUE_TIER.BASE,
-        desc = ILM.L["Base value for Static-Priced auction.\nMinimum value for Ascending and Tiered auction.\n\nSet to same value as other tier or negative to ignore."]
-    },
-    {
-        type = CONSTANTS.SLOT_VALUE_TIER.SMALL,
-        desc = ILM.L["Small value for Tiered auction.\n\nSet to same value as other tier or negative to ignore."]
-    },
-    {
-        type = CONSTANTS.SLOT_VALUE_TIER.MEDIUM,
-        desc = ILM.L["Medium value for Tiered auction.\n\nSet to same value as other tier or negative to ignore."]
-    },
-    {
-        type = CONSTANTS.SLOT_VALUE_TIER.LARGE,
-        desc = ILM.L["Large value for Tiered auction.\n\nSet to same value as other tier or negative to ignore."]
+        desc = ILM.L["Minimum bid value. Set to 0 or negative to ignore."]
     },
     {
         type = CONSTANTS.SLOT_VALUE_TIER.MAX,
-        desc = ILM.L["Maximum value for Ascending and Tiered auction.\n\nSet to same value as other tier or negative to ignore."]
+        desc = ILM.L["Maximum bid value. Set to 0 or negative to ignore."]
     }
 }
 
-local function generateDynamicItemValuesHandlers(roster)
-    local equationGet = (function()
-        return roster:GetCalculator():GetEquation()
-    end)
-    local equationSet = (function(value)
-        ILM.MODULES.RosterManager:SetRosterDynamicItemValueEquation(roster, value)
-    end)
-    local expvarGet = (function()
-        return roster:GetCalculator():GetExpvar()
-    end)
-    local expvarSet = (function(value)
-        ILM.MODULES.RosterManager:SetRosterDynamicItemValueExpvar(roster, value)
-    end)
-    local multiplierGet = (function()
-        return roster:GetCalculator():GetMultiplier()
-    end)
-    local multiplierSet = (function(value)
-        ILM.MODULES.RosterManager:SetRosterDynamicItemValueMultiplier(roster, value)
-    end)
-    local slotGet = (function(slot)
-        return roster:GetCalculator():GetSlotMultiplier(slot)
-    end)
-    local slotSet = (function(slot, value)
-        ILM.MODULES.RosterManager:SetRosterDynamicItemValueSlotMultiplier(roster, slot, value)
-    end)
-    local tierGet = (function(tier)
-        return roster:GetCalculator():GetTierMultiplier(tier)
-    end)
-    local tierSet = (function(tier, value)
-        ILM.MODULES.RosterManager:SetRosterDynamicItemValueTierMultiplier(roster, tier, value)
-    end)
-    return equationGet, equationSet, expvarGet, expvarSet, multiplierGet, multiplierSet, slotGet, slotSet, tierGet, tierSet
-end
 
 local function default_slot_values(self, roster)
     local args = {}
@@ -483,112 +414,6 @@ local function default_slot_values(self, roster)
     return args
 end
 
-local function dynamic_item_values(self, roster, equationGet, equationSet, expvarGet, expvarSet, multiplierGet, multiplierSet, slotGet, slotSet, tierGet, tierSet)
-    local args = {}
-    local order = 0
-    local prefix
-    args["equation_header"] = {
-        type = "header",
-        order = order,
-        name = ILM.L["Equation"]
-    }
-    order = order + 1
-    local wowpedia = "WoWpedia: |c43eeee00[Multiplier] * [item value]^[Exponent] * [slot multiplier]|r\n\n"
-    local epgpweb = "EPGPWeb: |c43eeee00[Multiplier] * [Base]^(ilvl/26 + (rarity - 4)) * [slot multiplier]|r\n\n"
-    local equationNote = "|c43ee4444Changing this will reset slot multipliers to default values.|r"
-    args["equation_multiplier"] = {
-        type = "input",
-        desc = ILM.L["Multiplier used by the equations"],
-        order = order,
-        width = 0.5,
-        get = (function(i) return tostring(multiplierGet()) end),
-        set = (function(i, v)
-            if self.readOnly then return end
-            multiplierSet(tonumber(v))
-        end),
-        name = ILM.L["Multiplier"],
-        pattern = CONSTANTS.REGEXP_FLOAT,
-    }
-    order = order + 1
-    args["equation_expvar"] = {
-        type = "input",
-        desc = ILM.L["Exponential scaling value used by the equations (Base for EPGPWeb, or Exponent for WoWpedia)"],
-        order = order,
-        width = 0.5,
-        get = (function(i) return tostring(expvarGet()) end),
-        set = (function(i, v)
-            if self.readOnly then return end
-            expvarSet(tonumber(v))
-        end),
-        name = ILM.L["Exponent / Base"],
-        pattern = CONSTANTS.REGEXP_FLOAT,
-    }
-    order = order + 1
-    args["equation_select"] = {
-        type = "select",
-        style = "dropdown",
-        desc = epgpweb .. wowpedia .. equationNote,
-        order = order,
-        values = CONSTANTS.ITEM_VALUE_EQUATIONS_GUI,
-        sorting = CONSTANTS.ITEM_VALUE_EQUATIONS_ORDERED,
-        set = (function(i, v)
-            if self.readOnly then return end
-            equationSet(tonumber(v))
-        end),
-        get = (function(i) return equationGet() end),
-        name = ILM.L["Select equation"]
-    }
-    order = order + 1
-    args["slot_multipliers_header"] = {
-        type = "header",
-        order = order,
-        name = ILM.L["Slot multipliers"]
-    }
-    order = order + 1
-    for _, slot in ipairs(CONSTANTS.INVENTORY_TYPES_SORTED) do
-        prefix = slot.type
-        if CONSTANTS.ITEM_SLOT_MULTIPLIERS[prefix] then
-            args[prefix .. "_"] = {
-                type = "input",
-                order = order,
-                width = 0.5,
-                get = (function(i) return tostring(slotGet(slot.type)) end),
-                set = (function(i, v)
-                    if self.readOnly then return end
-                    slotSet(slot.type, tonumber(v))
-                end),
-                name = slot.name,
-                pattern = CONSTANTS.REGEXP_FLOAT,
-            }
-            order = order + 1
-        end
-    end
-    args["tier_multipliers_header"] = {
-        type = "header",
-        order = order,
-        name = ILM.L["Tier multipliers"]
-    }
-    order = order + 1
-    for _, ivalues in ipairs(valuesWithDesc) do
-        -- local tierName = (CONSTANTS.SLOT_VALUE_TIERS_GUI[ivalues.type] or "")
-        local tierName = UTILS.GetRosterConditionalFieldName(ivalues.type, roster)
-        args[prefix .. "_" .. ivalues.type] = {
-            type = "input",
-            order = order,
-            desc = string.format(ILM.L["Multiplier for tier %s (if used by the auction type)."], tierName),
-            width = 0.6,
-            get = (function(i) return tostring(tierGet(ivalues.type)) end),
-            set = (function(i, v)
-                if self.readOnly then return end
-                tierSet(ivalues.type, tonumber(v))
-            end),
-            name = tierName,
-            pattern = CONSTANTS.REGEXP_FLOAT,
-        }
-        order = order + 1
-    end
-    return args
-end
 
 local function item_value_overrides(self, roster)
     local items = roster:GetAllItemValues()
@@ -740,48 +565,12 @@ local function boss_kill_award_values(self, roster, name)
     return args
 end
 
-local function award_multipliers(self, roster)
-    local args = {}
-
-    for i, class in ipairs(UTILS.GetClassList()) do
-        args[class] = {
-            type = "group",
-            name = UTILS.ColorCodeAndLocalizeClass(class),
-            order = i,
-            args = {}
-        }
-        local order = 0
-        local prefix
-        for _, slot in ipairs(CONSTANTS.INVENTORY_TYPES_SORTED) do
-            prefix = slot.type:lower()
-            order = order + 1
-            args[class].args[prefix .. "_value"] = {
-                type = "input",
-                order = order,
-                width = 0.5,
-                get = (function()
-                    return tostring(roster:GetSlotClassMultiplierValue(class, slot.type))
-                end),
-                set = (function(_, v)
-                    if self.readOnly then return end
-                    ILM.MODULES.RosterManager:SetSlotClassMultiplierValue(roster, class, slot.type, tonumber(v))
-                end),
-                name = slot.name,
-                pattern = CONSTANTS.REGEXP_FLOAT,
-            }
-            order = order + 1
-        end
-    end
-    return args
-end
 
 function RosterManagerOptions:GenerateRosterOptions(name)
     local roster = ILM.MODULES.RosterManager:GetRosterByName(name)
     local isManager = ILM.MODULES.ACL:CheckLevel(CONSTANTS.ACL.LEVEL.MANAGER)
 
     local disableManage = (function() return not isManager end)
-
-    local equationGet, equationSet, expvarGet, expvarSet, multiplierGet, multiplierSet, slotGet, slotSet, tierGet, tierSet = generateDynamicItemValuesHandlers(roster)
 
     local options = {
         type = "group",
@@ -1062,21 +851,6 @@ function RosterManagerOptions:GenerateRosterOptions(name)
                 type = "group",
                 order = 2,
                 args = {
-                    item_value_mode = {
-                        name = ILM.L["Item value mode"],
-                        desc = ILM.L["|cff00ee44Single-Priced:|r Static value mode. Only bidding Base value is supported.\n\n|cff00ee44Ascending:|r Ranged value mode. Allows bidding any value in |cff44ee00<base, max>|r.\n\n|cff00ee44Tiered:|r Ranged value mode. Allows bidding only specific values. Up to 5 tiers are configurable in |cff44ee00<base, small, medium, large, max>|r."],
-                        type = "select",
-                        disabled = disableManage,
-                        order = 5,
-                        values = CONSTANTS.ITEM_VALUE_MODES_GUI
-                    },
-                    dynamic_item_values = {
-                        name = ILM.L["Dynamic Item values"],
-                        type = "toggle",
-                        order = 6,
-                        disabled = disableManage,
-                        width = 1
-                    },
                     bidding_header = {
                         name = ILM.L["Bidding"],
                         type = "header",
@@ -1163,12 +937,6 @@ function RosterManagerOptions:GenerateRosterOptions(name)
                 order = 5,
                 args = item_value_overrides(self, roster)
             },
-            dynamic_item_values = {
-                name = ILM.L["Dynamic Item values"],
-                type = "group",
-                order = 6,
-                args = dynamic_item_values(self, roster, equationGet, equationSet, expvarGet, expvarSet, multiplierGet, multiplierSet, slotGet, slotSet, tierGet, tierSet)
-            },
             boss_kill_award_values = {
                 name = ILM.L["Boss kill award values"],
                 type = "group",
@@ -1244,38 +1012,7 @@ function RosterManagerOptions:GenerateRosterOptions(name)
             width = 1,
             order = 12.4
         }
-        options.args.auction.args.item_value_mode = {
-            name = ILM.L["Item value mode"],
-            desc = ILM.L["|cff00ee44Single-Priced:|r Static value mode. Only bidding Base value is supported.\n\n|cff00ee44Ascending:|r Ranged value mode. Allows bidding any value in |cff44ee00<base, max>|r.\n\n|cff00ee44Tiered:|r Ranged value mode. Allows bidding only specific values. Up to 5 tiers are configurable in |cff44ee00<base, small, medium, large, max>|r."],
-            type = "select",
-            disabled = disableManage,
-            order = 5,
-            values = CONSTANTS.ITEM_VALUE_MODES_GUI
-        }
-        options.args.auction.args.zero_sum_header = {
-            name = ILM.L["Zero-Sum"],
-            type = "header",
-            order = 7,
-            width = "full"
-        }
-        options.args.auction.args.zero_sum_bank = {
-            name = ILM.L["Zero-Sum Bank"],
-            desc = ILM.L["Enable paid value splitting amongst raiders."],
-            type = "toggle",
-            disabled = disableManage,
-            width = 1,
-            order = 8
-        }
-        options.args.auction.args.zero_sum_bank_inflation_value = {
-            name = ILM.L["Zero-Sum Inflation Value"],
-            desc = ILM.L["Additional points to be given to players atop of the split value."],
-            type = "input",
-            disabled = disableManage,
-            pattern = CONSTANTS.REGEXP_FLOAT_POSITIVE,
-            width = 1,
-            order = 9
-        }
-        options.args.auction.args.allow_below_min_standings = {
+options.args.auction.args.allow_below_min_standings = {
             name = ILM.L["Allow biding more than current standings"],
             desc = ILM.L["Allow biding more than current standings and ending up with less than minimum standings."],
             type = "toggle",

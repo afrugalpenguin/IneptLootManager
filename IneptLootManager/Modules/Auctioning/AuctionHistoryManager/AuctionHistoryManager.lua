@@ -113,7 +113,6 @@ function AuctionHistoryManager:AddAuctionItem(auctionItem, uuid)
             rolls     = rolls,
             upgraded  = items,
             time      = auction:GetEndTime(),
-            isEPGP    = false,
             uuid      = uuidData
         })
         ILM.GUI.AuctionHistory:Refresh(true)

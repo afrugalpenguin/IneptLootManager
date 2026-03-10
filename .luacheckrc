@@ -116,6 +116,7 @@ globals = {
 	"C_AddOns.GetAddOnInfo",
 	"C_Timer.After",
 	"C_Timer.NewTicker",
+	"C_Timer.NewTimer",
 	"GetNumGuildMembers",
 	"GetGuildRosterInfo",
 	"GetTime",

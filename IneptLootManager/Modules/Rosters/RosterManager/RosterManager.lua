@@ -19,13 +19,6 @@ local function initializePoints(entry, roster, GUID)
         roster:SetStandings(GUID, basePoints)
         ILM.MODULES.PointManager:AddFakePointHistory(roster, { GUID }, basePoints, CONSTANTS.POINT_CHANGE_REASON.ROSTER_JOIN, entry:time(), entry:creatorFull(), nil, CONSTANTS.POINT_CHANGE_TYPE.POINTS)
     end
-    if roster:GetPointType() == CONSTANTS.POINT_TYPE.EPGP then
-        local baseSpent = roster:GetConfiguration("baseSpent")
-        if baseSpent > 0 then
-            roster:UpdateSpent(GUID, baseSpent)
-            ILM.MODULES.PointManager:AddFakePointHistory(roster, { GUID }, baseSpent, CONSTANTS.POINT_CHANGE_REASON.ROSTER_JOIN, entry:time(), entry:creatorFull(), nil, CONSTANTS.POINT_CHANGE_TYPE.SPENT)
-        end
-    end
 end
 
 -- Controller Roster Manger
@@ -302,95 +295,19 @@ function RosterManager:Initialize()
             roster:SetFieldName(entry:tier(), entry:name())
         end))
 
+    -- Legacy ledger entries (no-op, kept so old entries don't break replay)
     ILM.MODULES.LedgerManager:RegisterEntryType(
-        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueEquation,
-        (function(entry)
-            LOG:TraceAndCount("mutator(DynamicItemValueEquation)")
-            local rosterUid = entry:rosterUid()
-
-            local roster = self:GetRosterByUid(rosterUid)
-            if not roster then
-                LOG:Debug("Updating non-existent roster [%s]", rosterUid)
-                return
-            end
-
-            roster:GetCalculator():SetEquation(entry:equation())
-        end))
-
+        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueEquation, (function() end))
     ILM.MODULES.LedgerManager:RegisterEntryType(
-        ILM.MODELS.LEDGER.ROSTER.AwardMultiplier,
-        (function(entry)
-            LOG:TraceAndCount("mutator(RosterAwardMultiplier)")
-            local rosterUid = entry:rosterUid()
-
-            local roster = self:GetRosterByUid(rosterUid)
-            if not roster then
-                LOG:Debug("Updating non-existent roster [%s]", rosterUid)
-                return
-            end
-
-            roster:SetSlotClassMultiplierValue(UTILS.NumberToClass(entry:ingameClass()), entry:slot(), entry:value())
-        end))
-
+        ILM.MODELS.LEDGER.ROSTER.AwardMultiplier, (function() end))
     ILM.MODULES.LedgerManager:RegisterEntryType(
-        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueExpvar,
-        (function(entry)
-            LOG:TraceAndCount("mutator(DynamicItemValueExpvar)")
-            local rosterUid = entry:rosterUid()
-
-            local roster = self:GetRosterByUid(rosterUid)
-            if not roster then
-                LOG:Debug("Updating non-existent roster [%s]", rosterUid)
-                return
-            end
-
-            roster:GetCalculator():SetExpvar(entry:expvar())
-        end))
-
+        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueExpvar, (function() end))
     ILM.MODULES.LedgerManager:RegisterEntryType(
-        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueMultiplier,
-        (function(entry)
-            LOG:TraceAndCount("mutator(DynamicItemValueMultiplier)")
-            local rosterUid = entry:rosterUid()
-
-            local roster = self:GetRosterByUid(rosterUid)
-            if not roster then
-                LOG:Debug("Updating non-existent roster [%s]", rosterUid)
-                return
-            end
-
-            roster:GetCalculator():SetMultiplier(entry:multiplier())
-        end))
-
+        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueMultiplier, (function() end))
     ILM.MODULES.LedgerManager:RegisterEntryType(
-        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueSlotMultiplier,
-        (function(entry)
-            LOG:TraceAndCount("mutator(DynamicItemValueSlotMultiplier)")
-            local rosterUid = entry:rosterUid()
-
-            local roster = self:GetRosterByUid(rosterUid)
-            if not roster then
-                LOG:Debug("Updating non-existent roster [%s]", rosterUid)
-                return
-            end
-
-            roster:GetCalculator():SetSlotMultiplier(entry:slot(), entry:multiplier())
-        end))
-
+        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueSlotMultiplier, (function() end))
     ILM.MODULES.LedgerManager:RegisterEntryType(
-        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueTierMultiplier,
-        (function(entry)
-            LOG:TraceAndCount("mutator(DynamicItemValueTierMultiplier)")
-            local rosterUid = entry:rosterUid()
-
-            local roster = self:GetRosterByUid(rosterUid)
-            if not roster then
-                LOG:Debug("Updating non-existent roster [%s]", rosterUid)
-                return
-            end
-
-            roster:GetCalculator():SetTierMultiplier(entry:tier(), entry:multiplier())
-        end))
+        ILM.MODELS.LEDGER.ROSTER.DynamicItemValueTierMultiplier, (function() end))
 
     ILM.MODULES.LedgerManager:RegisterOnRestart(function()
         self:WipeAll()
@@ -651,133 +568,6 @@ function RosterManager:SetSlotClassMultiplierValue(nameOrRoster, class, slot, va
     ILM.MODULES.LedgerManager:Submit(ILM.MODELS.LEDGER.ROSTER.AwardMultiplier:new(roster:UID(), class, slot, value), true)
 end
 
-function RosterManager:SetRosterDynamicItemValueEquation(nameOrRoster, equation)
-    LOG:Trace("RosterManager:SetRosterDynamicItemValueEquation()")
-    local roster
-    if UTILS.typeof(nameOrRoster, ILM.MODELS.Roster) then
-        roster = nameOrRoster
-    else
-        roster = self:GetRosterByName(nameOrRoster)
-    end
-    if not equation or not CONSTANTS.ITEM_VALUE_EQUATIONS[equation] then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueEquation(): Missing equation")
-        return
-    end
-    if roster:GetCalculator():GetEquation() == equation then
-        LOG:Debug("RosterManager:SetRosterDynamicItemValueEquation(): No change to value. Skipping.")
-        return
-    end
-
-    ILM.MODULES.LedgerManager:Submit(ILM.MODELS.LEDGER.ROSTER.DynamicItemValueEquation:new(roster:UID(), equation), true)
-end
-
-function RosterManager:SetRosterDynamicItemValueExpvar(nameOrRoster, expvar)
-    LOG:Trace("RosterManager:SetRosterDynamicItemValueExpvar()")
-    expvar = tonumber(expvar)
-    local roster
-    if UTILS.typeof(nameOrRoster, ILM.MODELS.Roster) then
-        roster = nameOrRoster
-    else
-        roster = self:GetRosterByName(nameOrRoster)
-    end
-    if not roster then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueExpvar(): Invalid roster object or name")
-        return nil
-    end
-    if not expvar then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueExpvar(): Missing expvar")
-        return
-    end
-    if roster:GetCalculator():GetExpvar() == expvar then
-        LOG:Debug("RosterManager:SetRosterDynamicItemValueExpvar(): No change to value. Skipping.")
-        return
-    end
-
-    ILM.MODULES.LedgerManager:Submit(ILM.MODELS.LEDGER.ROSTER.DynamicItemValueExpvar:new(roster:UID(), expvar), true)
-end
-
-function RosterManager:SetRosterDynamicItemValueMultiplier(nameOrRoster, multiplier)
-    LOG:Trace("RosterManager:SetRosterDynamicItemValueMultiplier()")
-    multiplier = tonumber(multiplier)
-    local roster
-    if UTILS.typeof(nameOrRoster, ILM.MODELS.Roster) then
-        roster = nameOrRoster
-    else
-        roster = self:GetRosterByName(nameOrRoster)
-    end
-    if not roster then
-        LOG:Error("RosterManager:SetRosterDefaultSlotTierValue(): Invalid roster object or name")
-        return nil
-    end
-    if not multiplier then
-        LOG:Error("RosterManager:SetRosterDefaultSlotTierValue(): Missing multiplier")
-        return
-    end
-    if roster:GetCalculator():GetMultiplier() == multiplier then
-        LOG:Debug("RosterManager:SetRosterDefaultSlotTierValue(): No change to value. Skipping.")
-        return
-    end
-
-    ILM.MODULES.LedgerManager:Submit(ILM.MODELS.LEDGER.ROSTER.DynamicItemValueMultiplier:new(roster:UID(), multiplier), true)
-end
-
-function RosterManager:SetRosterDynamicItemValueSlotMultiplier(nameOrRoster, slot, multiplier)
-    LOG:Trace("RosterManager:SetRosterDynamicItemValueSlotMultiplier()")
-    multiplier = tonumber(multiplier)
-    local roster
-    if UTILS.typeof(nameOrRoster, ILM.MODELS.Roster) then
-        roster = nameOrRoster
-    else
-        roster = self:GetRosterByName(nameOrRoster)
-    end
-    if not roster then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueSlotMultiplier(): Invalid roster object or name")
-        return nil
-    end
-    if not multiplier then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueSlotMultiplier(): Missing value")
-        return
-    end
-    if not slot or not CONSTANTS.INVENTORY_TYPES_SET[slot] then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueSlotMultiplier(): Missing slot")
-        return
-    end
-    if roster:GetCalculator():GetSlotMultiplier(slot) == multiplier then
-        LOG:Debug("RosterManager:SetRosterDynamicItemValueSlotMultiplier(): No change to value. Skipping.")
-        return
-    end
-
-    ILM.MODULES.LedgerManager:Submit(ILM.MODELS.LEDGER.ROSTER.DynamicItemValueSlotMultiplier:new(roster:UID(), slot, multiplier), true)
-end
-
-function RosterManager:SetRosterDynamicItemValueTierMultiplier(nameOrRoster, tier, multiplier)
-    LOG:Trace("RosterManager:SetRosterDynamicItemValueTierMultiplier()")
-    multiplier = tonumber(multiplier)
-    local roster
-    if UTILS.typeof(nameOrRoster, ILM.MODELS.Roster) then
-        roster = nameOrRoster
-    else
-        roster = self:GetRosterByName(nameOrRoster)
-    end
-    if not roster then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueTierMultiplier(): Invalid roster object or name")
-        return nil
-    end
-    if not multiplier then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueTierMultiplier(): Missing value")
-        return
-    end
-    if not tier or not CONSTANTS.SLOT_VALUE_TIERS[tier] then
-        LOG:Error("RosterManager:SetRosterDynamicItemValueTierMultiplier(): Missing tier")
-        return
-    end
-    if roster:GetCalculator():GetTierMultiplier(tier) == multiplier then
-        LOG:Debug("RosterManager:SetRosterDynamicItemValueTierMultiplier(): No change to value. Skipping.")
-        return
-    end
-
-    ILM.MODULES.LedgerManager:Submit(ILM.MODELS.LEDGER.ROSTER.DynamicItemValueTierMultiplier:new(roster:UID(), tier, multiplier), true)
-end
 
 function RosterManager:SetFieldName(nameOrRoster, field, name)
     LOG:Trace("RosterManager:SetFieldName()")

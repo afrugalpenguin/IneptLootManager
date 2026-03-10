@@ -18,8 +18,8 @@ function RosterConfiguration:New(i)
     o._ = {}
     -- Auction type: Open / Sealed / Vickrey
     o._.auctionType = CONSTANTS.AUCTION_TYPE.SEALED
-    -- Item Value mode: Single-Priced / Ascending
-    o._.itemValueMode = CONSTANTS.ITEM_VALUE_MODE.SINGLE_PRICED
+    -- Item Value mode: Ascending only
+    o._.itemValueMode = CONSTANTS.ITEM_VALUE_MODE.ASCENDING
     -- Zero-Sum Bank
     o._.zeroSumBank = false
     -- Zero-Sum Bank inflation value

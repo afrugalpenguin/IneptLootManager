@@ -119,6 +119,21 @@ local function CreateTabsWidget(self, content)
     tabsWidget:AddChild(content)
 
     self.aceObjects.tabsWidget = tabsWidget
+
+    -- Right-align the Audit tab after each BuildTabs pass
+    hooksecurefunc(tabsWidget, "BuildTabs", function(tw)
+        local auditTab
+        for _, tab in ipairs(tw.tabs) do
+            if tab.value == "audit" then
+                auditTab = tab
+                break
+            end
+        end
+        if auditTab then
+            auditTab:ClearAllPoints()
+            auditTab:SetPoint("TOPRIGHT", tw.frame, "TOPRIGHT", 0, auditTab:GetTop() and (auditTab:GetTop() - tw.frame:GetTop()) or -7)
+        end
+    end)
 end
 
 local function CreateTabsContent(self)

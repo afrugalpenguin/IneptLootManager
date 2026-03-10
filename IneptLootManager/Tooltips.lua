@@ -8,34 +8,21 @@ local UTILS     = ILM.UTILS
 
 local ILM_ICON_DARK = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-128.tga"
 
-local function formatPriceText(values, itemValueMode)
-    local text = ""
-    if itemValueMode == CONSTANTS.ITEM_VALUE_MODE.TIERED then
-        local valueAlreadyShowed = {}
-        for _, tier in ipairs(CONSTANTS.SLOT_VALUE_TIERS_ORDERED) do
-            local value = values[tier]
-            if not valueAlreadyShowed[value] then
-                text = text .. tostring(values[tier]) .. ", "
-                valueAlreadyShowed[value] = true
-            end
-        end
-    elseif itemValueMode == CONSTANTS.ITEM_VALUE_MODE.SINGLE_PRICED then
-        text = tostring(values[CONSTANTS.SLOT_VALUE_TIER.BASE])
-    elseif  itemValueMode == CONSTANTS.ITEM_VALUE_MODE.ASCENDING then
-        local base = values[CONSTANTS.SLOT_VALUE_TIER.BASE]
-        local max = values[CONSTANTS.SLOT_VALUE_TIER.MAX]
+local function formatPriceText(values)
+    local base = values[CONSTANTS.SLOT_VALUE_TIER.BASE]
+    local max = values[CONSTANTS.SLOT_VALUE_TIER.MAX]
 
-        local hasBase = (base > 0)
-        local hasMax = (max > 0)
-        if hasBase and hasMax then
-            text = tostring(base) .. " - " .. tostring(max)
-        elseif hasBase then
-            text = ">= " .. tostring(base)
-        elseif hasMax then
-            text = "<= " .. tostring(max)
-        else
-            text = ILM.L["Any"]
-        end
+    local hasBase = (base > 0)
+    local hasMax = (max > 0)
+    local text
+    if hasBase and hasMax then
+        text = tostring(base) .. " - " .. tostring(max)
+    elseif hasBase then
+        text = ">= " .. tostring(base)
+    elseif hasMax then
+        text = "<= " .. tostring(max)
+    else
+        text = ILM.L["Any"]
     end
     return UTILS.Trim(text)
 end
@@ -111,9 +98,8 @@ local function addItemPriceToTooltip(tooltip)
         local display = raid and true or ILM.MODULES.RosterManager:GetDisplayTooltip(roster:UID())
         if display then
             local values = roster:GetItemValuesFromItemLink(itemLink)
-            local itemValueMode = roster:GetConfiguration("itemValueMode")
             -- Format
-            local priceText = formatPriceText(values, itemValueMode)
+            local priceText = formatPriceText(values)
             -- Set tooltip
             if strlen(priceText) > 0 then
                 local rosterName = name

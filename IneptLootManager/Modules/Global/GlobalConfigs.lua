@@ -86,30 +86,6 @@ function GlobalConfigs:Initialize()
             order = 2.1,
             width = 1
         },
-        global_bindings = {
-            name = ILM.L["Bindings"],
-            desc = ILM.L["Open Key Bindings UI for AddOns"],
-            type = "execute",
-            func = (function()
-                local category = "AddOns"
-                category = _G[category] or category
-                KeyBindingFrame_LoadUI()
-                KeyBindingFrame.mode = 1
-                for _,buttons in pairs(KeyBindingFrame.categoryList.buttons) do
-                    if buttons.element then
-                        if buttons.element.name == category then
-                            HideUIPanel(InterfaceOptionsFrame)
-                            ShowUIPanel(KeyBindingFrame)
-                            KeyBindingFrame.cntCategory = buttons.element.category
-                            buttons:Click()
-                            -- OptionsList_SelectButton(buttons:GetParent(), buttons)
-                        end
-                    end
-                end
-            end),
-            width = 1,
-            order = 2.2
-        },
         global_sounds = {
             name = ILM.L["Addon sounds"],
             desc = ILM.L["Toggles addon sounds."],

@@ -1,5 +1,14 @@
 local name, ILM = ...
 
+-- Localisation: passthrough table (returns the key as the string)
+local L = {}
+setmetatable(L, {
+    __index = function (_, key)
+        return tostring(key)
+    end
+})
+ILM.L = L
+
 local GuildRoster = GuildRoster or (C_GuildInfo and C_GuildInfo.GuildRoster)
 
 function ILM.GetExpansion()
@@ -205,6 +214,14 @@ function CORE:_InitializeGUI()
     return true
 end
 
+function CORE:_InitializeControlPanel()
+    LOG:Trace("CORE:_InitializeControlPanel()")
+    MODULES.ControlPanel:Initialize()
+    MODULES.CLMImport:Initialize()
+
+    return true
+end
+
 function CORE:_Enable()
     LOG:Trace("CORE:_Enable()")
     MODULES.Comms:Enable()
@@ -221,6 +238,7 @@ local stages = {
     { name = "_InitializeFeatures", retry = false},
     { name = "_InitializeOptions",  retry = false},
     { name = "_InitializeGUI",      retry = false},
+    { name = "_InitializeControlPanel", retry = false},
     { name = "_InitializeExternal", retry = false},
 }
 local finalStage = { name = "_Enable", retry = false }

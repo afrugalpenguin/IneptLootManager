@@ -546,7 +546,6 @@ end
 
 local numRows
 local function GenerateValueButtonsAuctionOptions(self, auction)
-    local itemValueMode = auction and auction:GetMode() or CONSTANTS.ITEM_VALUE_MODE.SINGLE_PRICED
     local useOS = auction and auction:GetUseOS()
     local auctionType = auction and auction:GetType() or 0
 
@@ -599,17 +598,11 @@ local function GenerateValueButtonsAuctionOptions(self, auction)
     local offset = 8
     local usedTiers
 
-    local doDisplayValue = (function() return true end)
-    if itemValueMode == CONSTANTS.ITEM_VALUE_MODE.TIERED then
-        usedTiers = CONSTANTS.SLOT_VALUE_TIERS_ORDERED
-        doDisplayValue = (function(value) return (value >= 0) end)
-    elseif (itemValueMode == CONSTANTS.ITEM_VALUE_MODE.ASCENDING) then
-        usedTiers = {
-            CONSTANTS.SLOT_VALUE_TIER.BASE,
-            CONSTANTS.SLOT_VALUE_TIER.MAX
-        }
-        doDisplayValue = (function(value) return (value > 0) end)
-    end
+    local doDisplayValue = (function(value) return (value > 0) end)
+    usedTiers = {
+        CONSTANTS.SLOT_VALUE_TIER.BASE,
+        CONSTANTS.SLOT_VALUE_TIER.MAX
+    }
 
     local values = self.auctionItem and self.auctionItem:GetValues() or emptyTierValues
     if usedTiers then
@@ -637,8 +630,7 @@ local function GenerateValueButtonsAuctionOptions(self, auction)
             end
         end
 
-        if (itemValueMode == CONSTANTS.ITEM_VALUE_MODE.ASCENDING) then
-            generateButtonOptions["all_in"] = {
+        generateButtonOptions["all_in"] = {
                 name = ILM.L["All In"],
                 desc = string.format(ILM.L["Bid your current DKP (%s)."], ""),
                 type = "execute",
@@ -651,7 +643,6 @@ local function GenerateValueButtonsAuctionOptions(self, auction)
                 confirm = (function() return GetBidConfirmationPrompt(self) end),
             }
             numButtons = numButtons + 1
-        end
 
         if numButtons > 0 then
             numRows = numRows + 1
@@ -675,20 +666,10 @@ local function GenerateNamedButtonsAuctionOptions(self, auction)
     local numButtons = 0
     local usedTiers
 
-    local itemValueMode = auction and auction:GetMode() or CONSTANTS.ITEM_VALUE_MODE.SINGLE_PRICED
-
-    if itemValueMode == CONSTANTS.ITEM_VALUE_MODE.TIERED then
-        usedTiers = CONSTANTS.SLOT_VALUE_TIERS_ORDERED_REVERSED
-    elseif itemValueMode == CONSTANTS.ITEM_VALUE_MODE.ASCENDING then
-        usedTiers = {
-            CONSTANTS.SLOT_VALUE_TIER.BASE,
-            CONSTANTS.SLOT_VALUE_TIER.MAX
-        }
-    elseif itemValueMode == CONSTANTS.ITEM_VALUE_MODE.SINGLE_PRICED then
-        usedTiers = {
-            CONSTANTS.SLOT_VALUE_TIER.BASE
-        }
-    end
+    usedTiers = {
+        CONSTANTS.SLOT_VALUE_TIER.BASE,
+        CONSTANTS.SLOT_VALUE_TIER.MAX
+    }
 
     local values = self.auctionItem and self.auctionItem:GetValues() or emptyTierValues
     if usedTiers then

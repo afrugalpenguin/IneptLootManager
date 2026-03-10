@@ -177,7 +177,7 @@ function LootManager:AwardItem(raidOrRoster, name, itemLink, itemId, extra, valu
         else
             entry = ILM.MODELS.LEDGER.LOOT.Award:new(roster:UID(), profile, itemId, value, extra)
         end
-        local pointTypeSuffix = ((roster:GetPointType() == CONSTANTS.POINT_TYPE.DKP) and ILM.L["DKP"] or ILM.L["GP"])
+        local pointTypeSuffix = ILM.L["DKP"]
         ILM.MODULES.LedgerManager:Submit(entry, forceInstant)
         if ILM.GlobalConfigs:GetLootWarning() then
             local message = string.format(ILM.L["%s awarded to %s for %s %s"], itemLink, name, value, pointTypeSuffix)

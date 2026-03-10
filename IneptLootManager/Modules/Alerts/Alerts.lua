@@ -39,7 +39,9 @@ eventDispatcher.addEventListener(ILM.CONSTANTS.EVENTS.USER_RECEIVED_POINTS, func
 end)
 
 eventDispatcher.addEventListener(ILM.CONSTANTS.EVENTS.USER_RECEIVED_ITEM, function(event, data)
-    LootAlertSystem:AddAlert(data.link or "item:0", 1)
+    if LootAlertSystem then
+        LootAlertSystem:AddAlert(data.link or "item:0", 1)
+    end
 end)
 
 eventDispatcher.addEventListener(ILM.CONSTANTS.EVENTS.USER_BID_ACCEPTED, function(event, data)

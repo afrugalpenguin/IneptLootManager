@@ -79,7 +79,6 @@ function Roster:New(uid, pointType, raidsForFullAttendance, attendanceWeeksWindo
     o.profileLoot = {}          -- Loot received by players (dict of lists). Time descending per player
     o.disenchantedLoot = {}     -- Loot disenchanted
     o.weeklyGains = {}          -- Weekly point gains per player
-    o.calculator = ILM.MODELS.ItemValueCalculator:New() -- Dynamic item value calculator
     -- END ROSTER STATE --
 
     return o
@@ -89,9 +88,6 @@ function Roster:GetPointType()
     return self.pointType
 end
 
-function Roster:GetCalculator()
-    return self.calculator
-end
 
 function Roster:AddProfileByGUID(GUID)
     LOG:Debug("Add profile [%s] to roster [%s]", GUID, self:UID())
@@ -403,16 +399,9 @@ function Roster:ClearItemValues(itemId)
     self.itemValues[itemId] = nil
 end
 
-local function GetItemValuesProxy(self, itemInfoInput, itemId, calculateCallback)
+local function GetItemValuesProxy(self, itemInfoInput, itemId)
     local itemValues = self.itemValues[itemId]
     if itemValues == nil then
-        if self.configuration._.dynamicValue then
-            local dynamicValues = self.calculator[calculateCallback](self.calculator, itemInfoInput, self.configuration._.roundDecimals)
-            if dynamicValues then
-                return dynamicValues
-            end
-        end
-
         local _, _, _, itemEquipLoc, _, classID, subclassID = UTILS.GetItemInfoInstant(itemInfoInput)
         local equipLoc = UTILS.WorkaroundEquipLoc(classID, subclassID, itemEquipLoc)
         return self:GetDefaultSlotValues(ILM.IndirectMap.slot[itemId] or equipLoc)
@@ -421,11 +410,11 @@ local function GetItemValuesProxy(self, itemInfoInput, itemId, calculateCallback
 end
 
 function Roster:GetItemValues(itemId)
-    return GetItemValuesProxy(self, itemId, itemId, "CalculateFromId")
+    return GetItemValuesProxy(self, itemId, itemId)
 end
 
 function Roster:GetItemValuesFromItemLink(itemLink)
-    return GetItemValuesProxy(self, itemLink, UTILS.GetItemIdFromLink(itemLink), "CalculateFromLink")
+    return GetItemValuesProxy(self, itemLink, UTILS.GetItemIdFromLink(itemLink))
 end
 
 function Roster:GetSlotClassMultiplierValue(class, slot)
@@ -687,21 +676,15 @@ CONSTANTS.AUCTION_TYPES_OPEN = UTILS.Set({
 })
 
 CONSTANTS.ITEM_VALUE_MODE = {
-    SINGLE_PRICED = 0,
     ASCENDING = 1,
-    TIERED = 2,
 }
 
 CONSTANTS.ITEM_VALUE_MODES = UTILS.Set({
-    CONSTANTS.ITEM_VALUE_MODE.SINGLE_PRICED,
     CONSTANTS.ITEM_VALUE_MODE.ASCENDING,
-    CONSTANTS.ITEM_VALUE_MODE.TIERED,
 })
 
 CONSTANTS.ITEM_VALUE_MODES_GUI = {
-    [CONSTANTS.ITEM_VALUE_MODE.SINGLE_PRICED] = ILM.L["Single-Priced"],
     [CONSTANTS.ITEM_VALUE_MODE.ASCENDING] = ILM.L["Ascending"],
-    [CONSTANTS.ITEM_VALUE_MODE.TIERED] = ILM.L["Tiered"],
 }
 
 

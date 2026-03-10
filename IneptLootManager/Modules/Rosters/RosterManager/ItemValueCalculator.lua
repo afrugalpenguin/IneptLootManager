@@ -7,19 +7,19 @@ local UTILS     = ILM.UTILS
 -- ------------------------------- --
 
 local DEFAULT_MULTIPLIER = {
-    epgpweb = 0.483,
+    exponential = 0.483,
     wowpedia = 0.04
 }
 
 local DEFAULT_EXPVAR = 2.0
 
 CONSTANTS.ITEM_VALUE_EQUATION = {
-    EPGPWEB = 1,
+    EXPONENTIAL = 1,
     WOWPEDIA = 2
 }
 
 local equationIDtoParam = {
-    [CONSTANTS.ITEM_VALUE_EQUATION.EPGPWEB] = "epgpweb",
+    [CONSTANTS.ITEM_VALUE_EQUATION.EXPONENTIAL] = "exponential",
     [CONSTANTS.ITEM_VALUE_EQUATION.WOWPEDIA] = "wowpedia",
 }
 
@@ -37,7 +37,7 @@ local function getItemValue(quality, ilvl)
 end
 
 local calculators = {
-    [CONSTANTS.ITEM_VALUE_EQUATION.EPGPWEB] = (function(ilvl, quality, multiplier, expvar, slot_multiplier)
+    [CONSTANTS.ITEM_VALUE_EQUATION.EXPONENTIAL] = (function(ilvl, quality, multiplier, expvar, slot_multiplier)
         return multiplier * math.pow(expvar, (ilvl/26) + (quality - 4)) * slot_multiplier
     end),
     [CONSTANTS.ITEM_VALUE_EQUATION.WOWPEDIA] = (function(ilvl, quality, multiplier, expvar, slot_multiplier)
@@ -87,7 +87,7 @@ function ItemValueCalculator:New()
     setmetatable(o, self)
     self.__index = self
 
-    o.equation = CONSTANTS.ITEM_VALUE_EQUATION.EPGPWEB
+    o.equation = CONSTANTS.ITEM_VALUE_EQUATION.EXPONENTIAL
 
     o.multiplier = 1.0
     o.expvar = 2.0
@@ -183,50 +183,50 @@ function ItemValueCalculator:CalculateFromLink(itemLink, rounding)
 end
 
 CONSTANTS.ITEM_VALUE_EQUATIONS = UTILS.Set({
-    CONSTANTS.ITEM_VALUE_EQUATION.EPGPWEB,
+    CONSTANTS.ITEM_VALUE_EQUATION.EXPONENTIAL,
     CONSTANTS.ITEM_VALUE_EQUATION.WOWPEDIA,
 })
 
 CONSTANTS.ITEM_VALUE_EQUATIONS_ORDERED = {
-    CONSTANTS.ITEM_VALUE_EQUATION.EPGPWEB,
+    CONSTANTS.ITEM_VALUE_EQUATION.EXPONENTIAL,
     CONSTANTS.ITEM_VALUE_EQUATION.WOWPEDIA,
 }
 
 CONSTANTS.ITEM_VALUE_EQUATIONS_GUI = {
-    [CONSTANTS.ITEM_VALUE_EQUATION.EPGPWEB] = ILM.L["EPGP WEB"],
+    [CONSTANTS.ITEM_VALUE_EQUATION.EXPONENTIAL] = ILM.L["Exponential"],
     [CONSTANTS.ITEM_VALUE_EQUATION.WOWPEDIA] = ILM.L["Wowpedia"],
 }
 
 CONSTANTS.ITEM_SLOT_MULTIPLIERS = {
-    ["INVTYPE_HEAD"] = {            epgpweb = 1.0,  wowpedia = 1.0},
-    ["INVTYPE_NECK"] = {            epgpweb = 0.5,  wowpedia = 0.55},
-    ["INVTYPE_SHOULDER"] = {        epgpweb = 0.75,  wowpedia = 0.777},
-    ["INVTYPE_BODY"] = {            epgpweb = 0.0,  wowpedia = 0.0},
-    ["INVTYPE_CLOAK"] = {           epgpweb = 0.5,  wowpedia = 0.55},
-    ["INVTYPE_CHEST"] = {           epgpweb = 1.0,  wowpedia = 1.0},
-    ["INVTYPE_ROBE"] = {            epgpweb = 1.0,  wowpedia = 1.0},
-    ["INVTYPE_TABARD"] = {          epgpweb = 0.0,  wowpedia = 0.0},
-    ["INVTYPE_WRIST"] = {           epgpweb = 0.75,  wowpedia = 0.55},
-    ["INVTYPE_HAND"] = {            epgpweb = 0.75,  wowpedia = 0.777},
-    ["INVTYPE_WAIST"] = {           epgpweb = 1.0,  wowpedia = 0.777},
-    ["INVTYPE_LEGS"] = {            epgpweb = 1.0,  wowpedia = 1.0},
-    ["INVTYPE_FEET"] = {            epgpweb = 0.75,  wowpedia = 0.777},
-    ["INVTYPE_FINGER"] = {          epgpweb = 0.5,  wowpedia = 0.55},
-    ["INVTYPE_TRINKET"] = {         epgpweb = 0.75,  wowpedia = 0.7},
-    ["INVTYPE_WEAPON"] = {          epgpweb = 1.0,  wowpedia = 1.0},
-    ["INVTYPE_WEAPONMAINHAND"] = {  epgpweb = 1.5,  wowpedia = 0.42},
-    ["INVTYPE_WEAPONOFFHAND"] = {   epgpweb = 1.5,  wowpedia = 0.42},
-    ["INVTYPE_HOLDABLE"] = {        epgpweb = 0.5,  wowpedia = 0.55},
-    ["INVTYPE_2HWEAPON"] = {        epgpweb = 2.0,  wowpedia = 1.0},
-    ["INVTYPE_SHIELD"] = {          epgpweb = 0.5,  wowpedia = 0.55},
-    ["INVTYPE_RANGED"] = {          epgpweb = 0.5,  wowpedia = 0.42},
-    ["INVTYPE_RANGEDRIGHT"] = {     epgpweb = 0.5,  wowpedia = 0.42},
-    ["INVTYPE_NON_EQUIP"] = {       epgpweb = 0.0,  wowpedia = 0.0},
-    ["INVTYPE_BAG"] = {             epgpweb = 0.0,  wowpedia = 0.0},
-    ["INVTYPE_AMMO"] = {            epgpweb = 0.0,  wowpedia = 0.0},
-    ["INVTYPE_THROWN"] = {          epgpweb = 0.5,  wowpedia = 0.42},
-    ["INVTYPE_QUIVER"] = {          epgpweb = 0.5,  wowpedia = 0.42},
-    ["INVTYPE_RELIC"] = {           epgpweb = 0.5,  wowpedia = 0.42}
+    ["INVTYPE_HEAD"] = {            exponential = 1.0,  wowpedia = 1.0},
+    ["INVTYPE_NECK"] = {            exponential = 0.5,  wowpedia = 0.55},
+    ["INVTYPE_SHOULDER"] = {        exponential = 0.75,  wowpedia = 0.777},
+    ["INVTYPE_BODY"] = {            exponential = 0.0,  wowpedia = 0.0},
+    ["INVTYPE_CLOAK"] = {           exponential = 0.5,  wowpedia = 0.55},
+    ["INVTYPE_CHEST"] = {           exponential = 1.0,  wowpedia = 1.0},
+    ["INVTYPE_ROBE"] = {            exponential = 1.0,  wowpedia = 1.0},
+    ["INVTYPE_TABARD"] = {          exponential = 0.0,  wowpedia = 0.0},
+    ["INVTYPE_WRIST"] = {           exponential = 0.75,  wowpedia = 0.55},
+    ["INVTYPE_HAND"] = {            exponential = 0.75,  wowpedia = 0.777},
+    ["INVTYPE_WAIST"] = {           exponential = 1.0,  wowpedia = 0.777},
+    ["INVTYPE_LEGS"] = {            exponential = 1.0,  wowpedia = 1.0},
+    ["INVTYPE_FEET"] = {            exponential = 0.75,  wowpedia = 0.777},
+    ["INVTYPE_FINGER"] = {          exponential = 0.5,  wowpedia = 0.55},
+    ["INVTYPE_TRINKET"] = {         exponential = 0.75,  wowpedia = 0.7},
+    ["INVTYPE_WEAPON"] = {          exponential = 1.0,  wowpedia = 1.0},
+    ["INVTYPE_WEAPONMAINHAND"] = {  exponential = 1.5,  wowpedia = 0.42},
+    ["INVTYPE_WEAPONOFFHAND"] = {   exponential = 1.5,  wowpedia = 0.42},
+    ["INVTYPE_HOLDABLE"] = {        exponential = 0.5,  wowpedia = 0.55},
+    ["INVTYPE_2HWEAPON"] = {        exponential = 2.0,  wowpedia = 1.0},
+    ["INVTYPE_SHIELD"] = {          exponential = 0.5,  wowpedia = 0.55},
+    ["INVTYPE_RANGED"] = {          exponential = 0.5,  wowpedia = 0.42},
+    ["INVTYPE_RANGEDRIGHT"] = {     exponential = 0.5,  wowpedia = 0.42},
+    ["INVTYPE_NON_EQUIP"] = {       exponential = 0.0,  wowpedia = 0.0},
+    ["INVTYPE_BAG"] = {             exponential = 0.0,  wowpedia = 0.0},
+    ["INVTYPE_AMMO"] = {            exponential = 0.0,  wowpedia = 0.0},
+    ["INVTYPE_THROWN"] = {          exponential = 0.5,  wowpedia = 0.42},
+    ["INVTYPE_QUIVER"] = {          exponential = 0.5,  wowpedia = 0.42},
+    ["INVTYPE_RELIC"] = {           exponential = 0.5,  wowpedia = 0.42}
 }
 
 ILM.MODELS.ItemValueCalculator = ItemValueCalculator
