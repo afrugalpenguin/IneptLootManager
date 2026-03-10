@@ -5,9 +5,9 @@ local LOG = ILM.LOG
 local CONSTANTS = ILM.CONSTANTS
 local UTILS = ILM.UTILS
 
-local ILM_ICON_DARK = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-32.png"
+local ILM_ICON_DARK = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-128.tga"
 
-local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
+local LibDD = LibStub:GetLibrary("LibUIDropDownMenuNumy-4.0")
 UTILS.LibDD = LibDD
 local DumpTable = LibStub("EventSourcing/Util").DumpTable
 

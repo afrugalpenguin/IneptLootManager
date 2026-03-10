@@ -6,7 +6,7 @@ local  _, ILM = ...
 -- local UTILS     = ILM.UTILS
 -- ------------------------------- --
 
-local ILM_ICON_DARK = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-32.png"
+local ILM_ICON_DARK = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-128.tga"
 local ILM_TEXTURE = string.format("|T%s:0|t", ILM_ICON_DARK)
 
 local function subsituteWithIcon(message)

@@ -116,7 +116,7 @@ function ProfileInfoManager:Initialize()
     ILM.MODULES.LedgerManager:RegisterOnUpdate(function(lag, uncommitted)
         if lag ~= 0 or uncommitted ~= 0 then return end
         if not self._initialized then
-            LOG:Message(ILM.L["Inept Loot Manager %s initialization complete. %s"], UTILS.ColorCodeText(ILM.MODULES.Version:GetString(), "00cc00"), "Created by |cffe6cc80Lantis|r Annalina-Mirage Raceway")
+            LOG:Message(ILM.L["Inept Loot Manager %s initialisation complete. %s"], UTILS.ColorCodeText("v1.0.0", "00cc00"), "by |cffe6cc80Castborn|r")
             if ILM.AF then LOG:Message("Happy |cff44ee44April Fools'|r raid week!") end
             C_Timer.After(1, function()
                 RestoreVersions(self)

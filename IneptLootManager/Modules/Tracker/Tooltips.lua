@@ -1,10 +1,11 @@
+local _, ILM = ...
 local PRIV = ILM._TRACKER
 local UTILS     = ILM.UTILS
 
 local ColorCodeText = UTILS.ColorCodeText
 local GetClassColor = UTILS.GetClassColor
 
-local ILM_ICON_DARK = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-32.png"
+local ILM_ICON_DARK = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-128.tga"
 
 local cache = {}
 

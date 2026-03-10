@@ -157,7 +157,7 @@ local function UpdateLoadingBanner(self)
                 name = "|cffdcb749ILM is processing|r",
                 type = "description",
                 fontSize = "large",
-                image = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-64.png",
+                image = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-128.tga",
                 order = 1
             },
             middle = {

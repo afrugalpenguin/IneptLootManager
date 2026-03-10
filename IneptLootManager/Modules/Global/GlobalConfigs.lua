@@ -48,56 +48,17 @@ function GlobalConfigs:Initialize()
         ilm_logo = {
             name = "",
             type = "description",
-            image = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-64.png",
+            image = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-128.tga",
             width = 0.25,
             order = 0
         },
         author = {
             type = "description",
-            name = [=[Created by |cffe6cc80Lantis|r Annalina-Mirage Raceway]=],
+            name = [=[created by |cffe6cc80Castborn|r]=],
             fontSize = "large",
             descStyle = "inline",
             width = 3,
             order = 0.1
-        },
-        spacing1 = {
-            type = "description",
-            fontSize = "large",
-            name = "",
-            width = 0.25,
-            order = 0.2
-        },
-        patron_kudos = {
-            type = "description",
-            name = [=[
-Thank you patrons!
-]=],
-            fontSize = "medium",
-            descStyle = "inline",
-            width = 3,
-            order = 0.3
-        },
-        spacing2 = {
-            type = "description",
-            fontSize = "large",
-            name = "",
-            width = 0.25,
-            order = 0.7
-        },
-        discord = {
-            type = "description",
-            name = ILM.L["Join our discord for more info: "],
-            fontSize = "medium",
-            width = 1.1,
-            order = 0.8
-        },
-        discord_link = {
-            type = "input",
-            name = "",
-            get = (function(i) return "|cff44ee44|r" end),
-            set = (function(i,v) end),
-            width = 1,
-            order = 0.9
         },
         global_header = {
             type = "header",

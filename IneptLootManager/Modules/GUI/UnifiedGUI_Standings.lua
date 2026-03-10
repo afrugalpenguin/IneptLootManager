@@ -749,5 +749,5 @@ ILM.GUI.Unified:RegisterTab(
         restore = restoreHandler,
         dataReady = dataReadyHandler
     },
-    "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-32.png"
+    "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-128.tga"
 )

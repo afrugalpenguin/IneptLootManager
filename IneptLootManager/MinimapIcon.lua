@@ -157,7 +157,7 @@ function Minimap:Initialize()
         -- },
         {
             title = ILM.L["Configuration"],
-            icon = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-32.png",
+            icon = "Interface\\AddOns\\IneptLootManager\\Media\\Icons\\ilm-dark-128.tga",
             func = (function()
                 OpenToCategory(addonName)
                 OpenToCategory(addonName)
