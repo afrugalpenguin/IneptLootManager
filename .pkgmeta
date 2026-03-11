@@ -5,16 +5,16 @@ manual-changelog:
   markup-type: markdown
 
 ignore:
-  - images
+  - images/
   - README.md
   - CHANGELOG.md
   - CLAUDE.md
   - NOTICE
   - .gitignore
   - .pkgmeta
-  - .github
+  - .github/
   - "*.svg"
   - "*.png"
-  - docs
-  - tests
+  - docs/
+  - tests/
   - .luacheckrc
